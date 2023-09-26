@@ -1,7 +1,6 @@
 package isthatkirill.tasklist.security.dto;
 
-import lombok.AccessLevel;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -9,6 +8,9 @@ import lombok.experimental.FieldDefaults;
  */
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JwtResponse {
 

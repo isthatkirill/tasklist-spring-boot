@@ -1,4 +1,4 @@
-package isthatkirill.tasklist.security;
+package isthatkirill.tasklist.security.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

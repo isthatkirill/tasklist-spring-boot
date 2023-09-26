@@ -1,11 +1,10 @@
-package isthatkirill.tasklist.security;
+package isthatkirill.tasklist.security.model;
 
 import isthatkirill.tasklist.model.Role;
 import isthatkirill.tasklist.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,7 +26,7 @@ public class JwtUserFactory {
     }
 
     private static List<GrantedAuthority> buildAuthorities(Set<Role> roles) {
-        return new ArrayList<>(roles).stream()
+        return roles.stream()
                 .map(Enum::name)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
