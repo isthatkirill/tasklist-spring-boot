@@ -1,8 +1,8 @@
 package isthatkirill.tasklist.security.service;
 
-import isthatkirill.tasklist.model.User;
 import isthatkirill.tasklist.security.model.JwtUserFactory;
-import isthatkirill.tasklist.service.UserService;
+import isthatkirill.tasklist.user.model.User;
+import isthatkirill.tasklist.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,7 +1,7 @@
 package isthatkirill.tasklist.security.model;
 
-import isthatkirill.tasklist.model.Role;
-import isthatkirill.tasklist.model.User;
+import isthatkirill.tasklist.user.model.Role;
+import isthatkirill.tasklist.user.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

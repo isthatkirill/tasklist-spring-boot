@@ -1,4 +1,4 @@
-package isthatkirill.tasklist.model;
+package isthatkirill.tasklist.user.model;
 
 /**
  * @author Kirill Emelyanov

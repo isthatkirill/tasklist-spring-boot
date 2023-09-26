@@ -1,4 +1,4 @@
-package isthatkirill.tasklist.repositorty;
+package isthatkirill.tasklist.user.repositorty;
 
 import org.springframework.stereotype.Repository;
 

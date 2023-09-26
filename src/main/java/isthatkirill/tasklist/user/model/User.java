@@ -1,12 +1,10 @@
-package isthatkirill.tasklist.model;
+package isthatkirill.tasklist.user.model;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import org.springframework.scheduling.config.Task;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,6 +22,5 @@ public class User {
     String email;
     String password;
     Set<Role> roles;
-    List<Task> tasks;
 
 }

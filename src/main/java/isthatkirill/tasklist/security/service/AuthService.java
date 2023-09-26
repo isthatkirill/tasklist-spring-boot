@@ -1,4 +1,4 @@
-package isthatkirill.tasklist.service;
+package isthatkirill.tasklist.security.service;
 
 import isthatkirill.tasklist.security.dto.JwtRequest;
 import isthatkirill.tasklist.security.dto.JwtResponse;

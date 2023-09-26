@@ -1,7 +1,6 @@
 package isthatkirill.tasklist.error;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 /**
@@ -10,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EntityNotFoundException extends RuntimeException {
-
 
 
     public EntityNotFoundException(Class<?> entityClass, Long entityId) {
