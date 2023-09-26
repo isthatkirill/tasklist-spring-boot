@@ -5,6 +5,7 @@ import isthatkirill.tasklist.security.dto.JwtResponse;
 import isthatkirill.tasklist.security.service.AuthService;
 import isthatkirill.tasklist.user.dto.UserDto;
 import isthatkirill.tasklist.user.service.UserService;
+import isthatkirill.tasklist.validation.OnCreate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -32,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserDto register(@Valid @RequestBody UserDto userDto) {
+    public UserDto register(@Validated(OnCreate.class) @RequestBody UserDto userDto) {
         return userService.create(userDto);
 
     }

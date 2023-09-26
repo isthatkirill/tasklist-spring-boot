@@ -1,8 +1,10 @@
 package isthatkirill.tasklist.security.service;
 
+import isthatkirill.tasklist.error.EntityNotFoundException;
 import isthatkirill.tasklist.security.dto.JwtRequest;
 import isthatkirill.tasklist.security.dto.JwtResponse;
 import isthatkirill.tasklist.user.model.User;
+import isthatkirill.tasklist.user.repositorty.UserRepository;
 import isthatkirill.tasklist.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -27,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
                 jwtRequest.getUsername(),
                 jwtRequest.getPassword()
         ));
-        User user = userService.getByUsername(jwtRequest.getUsername());
+        User user = checkIfUserExistsAndGet(jwtRequest.getUsername());
         return JwtResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
@@ -39,6 +41,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtResponse refresh(String refreshToken) {
         return jwtTokenProvider.refreshUserTokens(refreshToken);
+    }
+
+    private User checkIfUserExistsAndGet(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, username));
     }
 
 }

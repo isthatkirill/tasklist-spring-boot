@@ -5,10 +5,12 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import isthatkirill.tasklist.error.AccessDeniedException;
+import isthatkirill.tasklist.error.EntityNotFoundException;
 import isthatkirill.tasklist.security.dto.JwtResponse;
 import isthatkirill.tasklist.security.props.JwtProperties;
 import isthatkirill.tasklist.user.model.Role;
 import isthatkirill.tasklist.user.model.User;
+import isthatkirill.tasklist.user.repositorty.UserRepository;
 import isthatkirill.tasklist.user.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +36,7 @@ public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
     private final UserDetailsService userDetailsService;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private Key key;
 
     @PostConstruct
@@ -74,7 +76,7 @@ public class JwtTokenProvider {
             throw new AccessDeniedException();
         }
         Long userId = getId(refreshToken);
-        User user = userService.getById(userId);
+        User user = checkIfUserExistsAndGet(userId);
         return JwtResponse.builder()
                 .id(userId)
                 .username(user.getUsername())
@@ -117,6 +119,11 @@ public class JwtTokenProvider {
         return roles.stream()
                 .map(Enum::name)
                 .collect(Collectors.toList());
+    }
+
+    private User checkIfUserExistsAndGet(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, id));
     }
 
 }
