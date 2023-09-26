@@ -4,7 +4,6 @@ import isthatkirill.tasklist.error.EntityNotFoundException;
 import isthatkirill.tasklist.security.model.JwtUserFactory;
 import isthatkirill.tasklist.user.model.User;
 import isthatkirill.tasklist.user.repositorty.UserRepository;
-import isthatkirill.tasklist.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

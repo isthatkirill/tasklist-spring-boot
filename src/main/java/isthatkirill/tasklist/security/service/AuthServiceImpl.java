@@ -5,8 +5,8 @@ import isthatkirill.tasklist.security.dto.JwtRequest;
 import isthatkirill.tasklist.security.dto.JwtResponse;
 import isthatkirill.tasklist.user.model.User;
 import isthatkirill.tasklist.user.repositorty.UserRepository;
-import isthatkirill.tasklist.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
  * @author Kirill Emelyanov
  */
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -30,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
                 jwtRequest.getPassword()
         ));
         User user = checkIfUserExistsAndGet(jwtRequest.getUsername());
+        log.info("User with username={} logged in", user.getUsername());
         return JwtResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())

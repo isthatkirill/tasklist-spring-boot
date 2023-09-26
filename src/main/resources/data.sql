@@ -1,7 +1,7 @@
 insert into users(name, username, email, password)
-values ('kirill', 'isthatkirill', 'isthatkirill@yandex.ru', '$2a$12$m03nQbX3Xp4G04TGdXfcK.4XoiRqbMb0in0hZ/nFdrheFQU6svo6W'),
-       ('anna', 'annushka', 'annushka@yandex.ru', '$2a$12$/HVpYIlpqnYvwU7sanp6XuMDDD0lfQYWkaQLSU8xasmP0LelYZ5Ii'),
-       ('anastasia', 'stassy', 'stassy@yandex.ru', '$2a$12$lNIu6EReMAUDv51xHeDh1esFgq4JlimCu6KGYiG072pl3HTTDWjRC');
+values ('kirill', 'isthatkirill', 'isthatkirill@yandex.ru', '$2a$10$XuXAvrwHuN1zGvG/cuUZI.0W60KuJgFJ9JpWqyJ2tFCd/MEb5QtT6'),
+       ('anna', 'annushka', 'annushka@yandex.ru', '$2a$10$Tk/USu2.k47J.O6ynxXNSO2I5EhvdTYN8IuGhRRLyE0zH02qmf5k2'),
+       ('anastasia', 'stassy', 'stassy@yandex.ru', '$2a$10$wf7.f.hNdDgK5R2uKLPylOgd0mG9XTx35dVtnVi1Ksp8mY.UrspNy');
 
 insert into user_roles (user_id, role)
 values (1, 'ROLE_ADMIN'),

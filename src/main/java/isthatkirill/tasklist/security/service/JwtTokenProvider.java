@@ -11,7 +11,6 @@ import isthatkirill.tasklist.security.props.JwtProperties;
 import isthatkirill.tasklist.user.model.Role;
 import isthatkirill.tasklist.user.model.User;
 import isthatkirill.tasklist.user.repositorty.UserRepository;
-import isthatkirill.tasklist.user.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

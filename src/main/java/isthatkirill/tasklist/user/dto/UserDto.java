@@ -30,7 +30,7 @@ public class UserDto {
     private String username;
 
     @NotBlank(message = "Email cannot be blank or null", groups = {OnCreate.class})
-    @Email(message = "Email must satisfy pattern",  groups = {OnCreate.class, OnUpdate.class})
+    @Email(message = "Email must satisfy pattern", groups = {OnCreate.class, OnUpdate.class})
     private String email;
 
     @NotBlank(message = "Password cannot be blank or null", groups = {OnCreate.class})
