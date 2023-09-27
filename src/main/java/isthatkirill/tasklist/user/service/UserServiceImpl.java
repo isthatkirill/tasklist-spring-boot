@@ -54,19 +54,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserDto(user);
     }
 
-
     @Override
     @Transactional(readOnly = true)
-    public User getByUsername(String username) {
-        log.info("Get user by username={}", username);
-        return checkIfUserExistsAndGet(username);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public User getById(Long id) {
+    public UserDto getById(Long id) {
         log.info("Get user by id={}", id);
-        return checkIfUserExistsAndGet(id);
+        return userMapper.toUserDto(checkIfUserExistsAndGet(id));
     }
 
     private User checkIfUserExistsAndGet(Long id) {
