@@ -1,4 +1,4 @@
-package isthatkirill.tasklist.error;
+package isthatkirill.tasklist.error.exception;
 
 /**
  * @author Kirill Emelyanov

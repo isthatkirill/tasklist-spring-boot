@@ -1,4 +1,4 @@
-package isthatkirill.tasklist.error;
+package isthatkirill.tasklist.error.exception;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;

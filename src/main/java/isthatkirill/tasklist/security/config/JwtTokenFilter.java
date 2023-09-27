@@ -1,6 +1,6 @@
 package isthatkirill.tasklist.security.config;
 
-import isthatkirill.tasklist.error.EntityNotFoundException;
+import isthatkirill.tasklist.error.exception.EntityNotFoundException;
 import isthatkirill.tasklist.security.service.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
