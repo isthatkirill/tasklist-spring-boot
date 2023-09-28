@@ -16,7 +16,6 @@ public class UserSecurityExpression {
 
     public boolean canAccessUser(Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) return false;
         JwtUser user = (JwtUser) authentication.getPrincipal();
         Long id = user.getId();
         return userId.equals(id) || isAdmin(authentication);
@@ -24,7 +23,6 @@ public class UserSecurityExpression {
 
     public boolean canAccessAdminEndpoints() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) return false;
         return isAdmin(authentication);
     }
 

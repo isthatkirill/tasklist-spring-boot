@@ -17,7 +17,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
@@ -30,7 +30,8 @@ public class UserController {
 
     @PatchMapping("/{userId}")
     @PreAuthorize("@userSecurityExpression.canAccessUser(#userId)")
-    public UserDto update(@PathVariable Long userId, @Validated(OnUpdate.class) @RequestBody UserDto userDto) {
+    public UserDto update(@Validated(OnUpdate.class) @RequestBody UserDto userDto,
+                          @PathVariable Long userId) {
         return userService.update(userDto, userId);
     }
 

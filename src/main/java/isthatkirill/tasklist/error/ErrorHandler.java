@@ -73,7 +73,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse unexpectedErrorHandle(final Exception e) {
-        log.info("Error: {} Description: {}", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e.getMessage());
+        log.info("Error: {} Description: {}", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e.getMessage(), e);
         return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e.getMessage());
     }
 
