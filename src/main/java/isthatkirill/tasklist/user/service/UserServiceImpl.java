@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -61,14 +62,17 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserDto(checkIfUserExistsAndGet(id));
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserDto> getAll() {
+        log.info("Get all users");
+        return userMapper.toUserDto(userRepository.findAll());
+    }
+
+
     private User checkIfUserExistsAndGet(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, id));
-    }
-
-    private User checkIfUserExistsAndGet(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException(User.class, username));
     }
 
     private void checkForUnique(UserDto userDto) {

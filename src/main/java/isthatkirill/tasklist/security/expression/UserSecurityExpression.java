@@ -22,6 +22,12 @@ public class UserSecurityExpression {
         return userId.equals(id) || isAdmin(authentication);
     }
 
+    public boolean canAccessAdminEndpoints() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) return false;
+        return isAdmin(authentication);
+    }
+
     private boolean isAdmin(Authentication authentication) {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Role.ROLE_ADMIN.name());
         return authentication.getAuthorities().contains(authority);
