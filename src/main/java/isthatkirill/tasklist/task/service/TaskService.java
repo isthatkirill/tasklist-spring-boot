@@ -1,6 +1,7 @@
 package isthatkirill.tasklist.task.service;
 
-import isthatkirill.tasklist.task.dto.UserTaskDto;
+import isthatkirill.tasklist.task.dto.TaskDtoRequest;
+import isthatkirill.tasklist.task.dto.TaskDtoResponse;
 
 /**
  * @author Kirill Emelyanov
@@ -8,6 +9,6 @@ import isthatkirill.tasklist.task.dto.UserTaskDto;
 
 public interface TaskService {
 
-    UserTaskDto create(UserTaskDto taskDto, Long userId);
+    TaskDtoResponse create(TaskDtoRequest taskDto, Long userId);
 
 }

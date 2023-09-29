@@ -36,6 +36,9 @@ public class Task {
     @Column(name = "priority", nullable = false)
     String priority;
 
+    @Column(name = "status", nullable = false)
+    String status;
+
     @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;
 

@@ -1,7 +1,8 @@
 package isthatkirill.tasklist.task.service;
 
 import isthatkirill.tasklist.error.exception.EntityNotFoundException;
-import isthatkirill.tasklist.task.dto.UserTaskDto;
+import isthatkirill.tasklist.task.dto.TaskDtoRequest;
+import isthatkirill.tasklist.task.dto.TaskDtoResponse;
 import isthatkirill.tasklist.task.mapper.TaskMapper;
 import isthatkirill.tasklist.task.model.Task;
 import isthatkirill.tasklist.task.repository.TaskRepository;
@@ -27,11 +28,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public UserTaskDto create(UserTaskDto taskDto, Long userId) {
+    public TaskDtoResponse create(TaskDtoRequest taskDto, Long userId) {
         log.info("New task created {} by user id={}", taskDto, userId);
         User user = checkIfUserExistsAndGet(userId);
         Task task = taskMapper.toTask(taskDto, user);
-        return taskMapper.toUserTaskDto(taskRepository.save(task));
+        return taskMapper.toTaskDtoResponse(taskRepository.save(task));
     }
 
     private User checkIfUserExistsAndGet(Long id) {

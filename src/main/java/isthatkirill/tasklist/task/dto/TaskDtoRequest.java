@@ -1,7 +1,8 @@
 package isthatkirill.tasklist.task.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import isthatkirill.tasklist.task.model.Priority;
+import isthatkirill.tasklist.task.model.enums.Priority;
+import isthatkirill.tasklist.task.model.enums.Status;
 import isthatkirill.tasklist.util.Constants;
 import isthatkirill.tasklist.validation.OnCreate;
 import isthatkirill.tasklist.validation.OnUpdate;
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserTaskDto {
+public class TaskDtoRequest {
 
     Long id;
 
@@ -48,6 +49,10 @@ public class UserTaskDto {
     @ValidEnum(enumClass = Priority.class,
             groups = {OnCreate.class, OnUpdate.class})
     String priority = Priority.DEFAULT.name();
+
+    @ValidEnum(enumClass = Status.class,
+            groups = {OnCreate.class, OnUpdate.class})
+    String status = Status.NEW.name();
 
     @JsonFormat(pattern = Constants.DATE_PATTERN)
     LocalDateTime lastModifiedAt;

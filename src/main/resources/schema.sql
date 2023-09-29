@@ -22,9 +22,10 @@ create table if not exists tasks
     title            varchar(128) not null,
     description      varchar(512) not null,
     priority         varchar(16)  not null,
+    status           varchar(16)  not null,
     created_at       TIMESTAMP    not null,
     expires_at       TIMESTAMP    not null,
     last_modified_at TIMESTAMP,
     notify           boolean,
-    user_id          bigint references users (id)
+    user_id          bigint references users (id) on delete cascade
 );

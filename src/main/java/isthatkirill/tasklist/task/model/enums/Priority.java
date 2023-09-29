@@ -1,4 +1,4 @@
-package isthatkirill.tasklist.task.model;
+package isthatkirill.tasklist.task.model.enums;
 
 /**
  * @author Kirill Emelyanov

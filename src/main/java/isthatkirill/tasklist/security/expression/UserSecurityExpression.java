@@ -16,14 +16,19 @@ public class UserSecurityExpression {
 
     public boolean canAccessUser(Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtUser user = (JwtUser) authentication.getPrincipal();
-        Long id = user.getId();
-        return userId.equals(id) || isAdmin(authentication);
+        return isCorrectUserId(userId) || isAdmin(authentication);
     }
 
     public boolean canAccessAdminEndpoints() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return isAdmin(authentication);
+    }
+
+    public boolean isCorrectUserId(Long userId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JwtUser user = (JwtUser) authentication.getPrincipal();
+        Long id = user.getId();
+        return userId.equals(id);
     }
 
     private boolean isAdmin(Authentication authentication) {
