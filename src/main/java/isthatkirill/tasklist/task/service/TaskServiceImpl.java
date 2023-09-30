@@ -1,6 +1,6 @@
 package isthatkirill.tasklist.task.service;
 
-import isthatkirill.tasklist.error.exception.EntityNotFoundException;
+import isthatkirill.tasklist.error.exception.entity.EntityNotFoundException;
 import isthatkirill.tasklist.task.dto.TaskDtoRequest;
 import isthatkirill.tasklist.task.dto.TaskDtoResponse;
 import isthatkirill.tasklist.task.mapper.TaskMapper;

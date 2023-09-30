@@ -1,4 +1,4 @@
-package isthatkirill.tasklist.security.props;
+package isthatkirill.tasklist.security.service.props;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

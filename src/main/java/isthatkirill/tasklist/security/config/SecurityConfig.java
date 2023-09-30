@@ -1,5 +1,7 @@
 package isthatkirill.tasklist.security.config;
 
+import isthatkirill.tasklist.security.filter.ExceptionHandlerFilter;
+import isthatkirill.tasklist.security.filter.JwtTokenFilter;
 import isthatkirill.tasklist.security.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -28,6 +30,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -66,7 +69,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .anonymous().disable()
-                .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtTokenFilter.class);
 
         return httpSecurity.build();
     }

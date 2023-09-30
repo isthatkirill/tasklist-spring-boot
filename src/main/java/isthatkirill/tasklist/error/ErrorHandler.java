@@ -1,8 +1,8 @@
 package isthatkirill.tasklist.error;
 
-import isthatkirill.tasklist.error.exception.AccessDeniedException;
-import isthatkirill.tasklist.error.exception.EntityNotFoundException;
-import isthatkirill.tasklist.error.exception.NotUniqueException;
+import isthatkirill.tasklist.error.exception.auth.AccessDeniedException;
+import isthatkirill.tasklist.error.exception.entity.EntityNotFoundException;
+import isthatkirill.tasklist.error.exception.entity.NotUniqueException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;

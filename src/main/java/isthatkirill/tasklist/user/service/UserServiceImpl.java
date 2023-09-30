@@ -1,7 +1,7 @@
 package isthatkirill.tasklist.user.service;
 
-import isthatkirill.tasklist.error.exception.EntityNotFoundException;
-import isthatkirill.tasklist.error.exception.NotUniqueException;
+import isthatkirill.tasklist.error.exception.entity.EntityNotFoundException;
+import isthatkirill.tasklist.error.exception.entity.NotUniqueException;
 import isthatkirill.tasklist.user.dto.UserDto;
 import isthatkirill.tasklist.user.mapper.UserMapper;
 import isthatkirill.tasklist.user.model.Role;

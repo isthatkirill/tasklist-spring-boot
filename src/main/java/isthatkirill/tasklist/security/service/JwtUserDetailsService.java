@@ -1,6 +1,6 @@
 package isthatkirill.tasklist.security.service;
 
-import isthatkirill.tasklist.error.exception.EntityNotFoundException;
+import isthatkirill.tasklist.error.exception.entity.EntityNotFoundException;
 import isthatkirill.tasklist.security.model.JwtUserFactory;
 import isthatkirill.tasklist.user.model.User;
 import isthatkirill.tasklist.user.repositorty.UserRepository;
