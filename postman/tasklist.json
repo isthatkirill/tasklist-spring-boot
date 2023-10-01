@@ -1,0 +1,1267 @@
+{
+	"info": {
+		"_postman_id": "49a5e0cb-a344-4bdb-a6a4-927a11eb36f0",
+		"name": "tasklist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27080870"
+	},
+	"item": [
+		{
+			"name": "authorization",
+			"item": [
+				{
+					"name": "login admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const requestBody = JSON.parse(pm.collectionVariables.get(\"rbAdmin\"));\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target.username).to.be.equal(requestBody.username);\r",
+									"    pm.expect(target.accessToken.toString()).to.be.not.null;\r",
+									"    pm.expect(target.refreshToken.toString()).to.be.not.null;\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"admin_id\", target.id);\r",
+									"pm.collectionVariables.set(\"jwt_admin\", target.accessToken);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"username\": \"isthatkirill\",\r",
+									"    \"password\": \"admin\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"rbAdmin\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{rbAdmin}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const requestBody = JSON.parse(pm.collectionVariables.get(\"rbUser\"));\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target.name).to.equal(requestBody.name);\r",
+									"    pm.expect(target.username).to.equal(requestBody.username);\r",
+									"    pm.expect(target.email).to.equal(requestBody.email);\r",
+									"    pm.expect(target.password).to.be.not.null;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"name\": \"vadim\",\r",
+									"    \"username\": \"vadim_qq\",\r",
+									"    \"email\": \"vadim@yandex.ru\",\r",
+									"    \"password\": \"user\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"rbUser\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{rbUser}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register with same username",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.be.badRequest;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"name\": \"vadim\",\r",
+									"    \"username\": \"vadim_qq\",\r",
+									"    \"email\": \"vadim@yandex.ru\",\r",
+									"    \"password\": \"user\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"rbUser\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{rbUser}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"username\": \"vadim_qq\",\r",
+									"    \"password\": \"user\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"rbUser\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const requestBody = JSON.parse(pm.collectionVariables.get(\"rbUser\"));\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target.username).to.be.equal(requestBody.username);\r",
+									"    pm.expect(target.accessToken.toString()).to.be.not.null;\r",
+									"    pm.expect(target.refreshToken.toString()).to.be.not.null;\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"user_id\", target.id);\r",
+									"pm.collectionVariables.set(\"jwt_user\", target.accessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{rbUser}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login non existent user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"username\": \"non_existent\",\r",
+									"    \"password\": \"user\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"rbTemp\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.be.badRequest;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{rbTemp}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login with wrong pass",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"username\": \"vadim_qq\",\r",
+									"    \"password\": \"user333\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"rbTemp\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.be.badRequest;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{rbTemp}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "get by admin himself",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const requestBody = JSON.parse(pm.collectionVariables.get(\"rbAdmin\"));\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target.username).to.be.equal(requestBody.username);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/{{admin_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{admin_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by admin another user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const requestBody = JSON.parse(pm.collectionVariables.get(\"rbUser\"));\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target.username).to.be.equal(requestBody.username);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by user himself",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const requestBody = JSON.parse(pm.collectionVariables.get(\"rbUser\"));\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target.username).to.be.equal(requestBody.username);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by user another user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 403 and json format\", function () {\r",
+									"    pm.response.to.be.forbidden;   \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/{{admin_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{admin_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update by user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"username\": \"vadim_new\",\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"rbUser\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const requestBody = JSON.parse(pm.collectionVariables.get(\"rbUser\"));\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target.username).to.be.equal(requestBody.username);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{rbUser}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user by admin",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"username\": \"vadim_update_by_admin\",\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"rbUser\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const requestBody = JSON.parse(pm.collectionVariables.get(\"rbUser\"));\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target.username).to.be.equal(requestBody.username);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{rbUser}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user after update",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"username\": \"vadim_update_by_admin\",\r",
+									"    \"password\": \"user\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"rbUser\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const requestBody = JSON.parse(pm.collectionVariables.get(\"rbUser\"));\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target.username).to.be.equal(requestBody.username);\r",
+									"    pm.expect(target.accessToken.toString()).to.be.not.null;\r",
+									"    pm.expect(target.refreshToken.toString()).to.be.not.null;\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"user_id\", target.id);\r",
+									"pm.collectionVariables.set(\"jwt_user\", target.accessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{rbUser}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all by admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const rbUser = JSON.parse(pm.collectionVariables.get(\"rbUser\"));\r",
+									"const rbAdmin = JSON.parse(pm.collectionVariables.get(\"rbAdmin\"))\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target[pm.collectionVariables.get(\"admin_id\") - 1].username).to.be.equal(rbAdmin.username);\r",
+									"    pm.expect(target[pm.collectionVariables.get(\"user_id\") - 1].username).to.be.equal(rbUser.username);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all by user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 403 and json format\", function () {\r",
+									"    pm.response.to.be.forbidden;   \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all by admin Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.be.ok;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const rbUser = JSON.parse(pm.collectionVariables.get(\"rbUser\"));\r",
+									"const rbAdmin = JSON.parse(pm.collectionVariables.get(\"rbAdmin\"))\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target[pm.collectionVariables.get(\"admin_id\") - 1].username).to.be.equal(rbAdmin.username);\r",
+									"    pm.expect(target[pm.collectionVariables.get(\"user_id\") - 1].username).to.be.equal(rbUser.username);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "task",
+			"item": [
+				{
+					"name": "create task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbm51c2hrYSIsImlkIjoyLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjk2MTg5Njc2LCJleHAiOjE2OTYxOTAyNzZ9.EigI5gOePFH3WlRjw4d0A4h79F2Hw3y7p8OkhxnlMyCiVvN7PWfmvoqsl95kH4OH4NQcbY-VeNU7Qc2YS5sHMw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"keykey\",\r\n    \"description\": \"keydescda\",\r\n    \"priority\": \"HIGH\",\r\n    \"status\": \"NEW\",\r\n    \"expiresAt\": \"2025-12-12 12:12:12\",\r\n    \"notify\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/2/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"2",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbm51c2hrYSIsImlkIjoyLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjk2MTg0OTY3LCJleHAiOjE2OTYxODU1Njd9.MA0lSN84wOHzal9j5ziFXsSb_V5W0oC_18ZYeL84Fj7-07pOjZct4-ECkyIiYtTLCaBGjNa_t1Cqpe06hELPFg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"title\": \"title\",\r\n    \"description\": \"description\",\r\n    \"priority\": \"DEFAULT\",\r\n    \"status\": \"DONE\",\r\n    \"createdAt\": \"2023-10-01 21:14:37\",\r\n    \"lastModifiedAt\": null,\r\n    \"expiresAt\": \"2023-12-12 12:12:12\",\r\n    \"notify\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/2/tasks/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"2",
+								"tasks",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbm51c2hrYSIsImlkIjoyLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjk2MTg1MzUzLCJleHAiOjE2OTYxODU5NTN9.uxmZ0q7VIDiXJfZToRbpMeBgAzcgXvgbXWHVNJj9FR8BC11C4iM8BZP3H68IJDvGGKDcpmCMi3WWHBWL6LYuxg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/1/tasks/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"1",
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJpc3RoYXRraXJpbGwiLCJpZCI6MSwicm9sZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9BRE1JTiJdLCJpYXQiOjE2OTYxODYwNzYsImV4cCI6MTY5NjE4NjY3Nn0.GPUNcicDFFW_msgviNvXhGuIqLqh9wMpfBKxZ2W5ZB_4_ZcjtDKRyYoS89UC0Mja25-ZnRfhs4qR4F6s6Jbcxg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/1/tasks/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"1",
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get All",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbm51c2hrYSIsImlkIjoyLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjk2MTg5Njc2LCJleHAiOjE2OTYxOTAyNzZ9.EigI5gOePFH3WlRjw4d0A4h79F2Hw3y7p8OkhxnlMyCiVvN7PWfmvoqsl95kH4OH4NQcbY-VeNU7Qc2YS5sHMw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/2/tasks?expiresBefore=2027-12-12 12:12:12",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"2",
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "priority",
+									"value": "DEFAULT",
+									"disabled": true
+								},
+								{
+									"key": "notify",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "expiresBefore",
+									"value": "2027-12-12 12:12:12"
+								},
+								{
+									"key": "size",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "pass",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "rbUser",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "admin_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "jwt_admin",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "jwt_user",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "rbAdmin",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "rbTemp",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "requestBody",
+			"value": ""
+		}
+	]
+}

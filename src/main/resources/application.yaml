@@ -14,5 +14,5 @@ spring:
 security:
   jwt:
     secret: cnczclEzUnEzclEzUnFyUVJHU0RHWkdaR0ZHRkdGREdnZGdzZ2FlZ2FlZ2FlZ2ZkZ2FnZWRmZ2RqeXVreXVreXVreXVr
-    access: 600000
+    access: 6000000
     refresh: 1296000000
