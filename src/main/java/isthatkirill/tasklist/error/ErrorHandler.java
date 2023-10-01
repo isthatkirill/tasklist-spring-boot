@@ -7,11 +7,13 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 import java.util.Set;
@@ -44,7 +46,7 @@ public class ErrorHandler {
     public ErrorResponse notValidArgumentHandle(final MethodArgumentNotValidException e) {
         List<FieldError> errors = e.getBindingResult().getFieldErrors();
         String errorMessage = errors.stream()
-                .map(error -> String.format("Field: %s -- Error: %s -- Value: %s",
+                .map(error -> String.format("Field: %s, error: %s, value: %s",
                         error.getField(), error.getDefaultMessage(), error.getRejectedValue()))
                 .collect(Collectors.joining("\n"));
         log.info("Error: {} Description: {}", HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
@@ -56,7 +58,7 @@ public class ErrorHandler {
     public ErrorResponse constraintViolationHandle(final ConstraintViolationException e) {
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         String errorMessage = violations.stream()
-                .map(violation -> String.format("Field: %s -- Error: %s -- Value: %s",
+                .map(violation -> String.format("Field: %s, error: %s, value: %s",
                         violation.getPropertyPath().toString(), violation.getMessage(), violation.getInvalidValue()))
                 .collect(Collectors.joining("\n"));
         log.info("Error: {} Description: {}", HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
@@ -68,6 +70,20 @@ public class ErrorHandler {
     public ErrorResponse accessDeniedHandle(final Exception e) {
         log.info("Error: {} Description: {}", HttpStatus.FORBIDDEN.getReasonPhrase(), e.getMessage());
         return new ErrorResponse(HttpStatus.FORBIDDEN.getReasonPhrase(), e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse httpMessageNotReadableHandle(final HttpMessageNotReadableException e) {
+        log.info("Error: {} Description: {}", HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage());
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse invalidArgumentHandle(final MethodArgumentTypeMismatchException e) {
+        log.info("Error: {} Description: {}", HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage());
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage());
     }
 
     @ExceptionHandler

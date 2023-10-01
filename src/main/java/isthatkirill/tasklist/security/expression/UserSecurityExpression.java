@@ -1,7 +1,11 @@
 package isthatkirill.tasklist.security.expression;
 
+import isthatkirill.tasklist.error.exception.entity.EntityNotFoundException;
 import isthatkirill.tasklist.security.model.JwtUser;
+import isthatkirill.tasklist.task.model.Task;
+import isthatkirill.tasklist.task.repository.TaskRepository;
 import isthatkirill.tasklist.user.model.Role;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +16,10 @@ import org.springframework.stereotype.Service;
  */
 
 @Service("userSecurityExpression")
+@RequiredArgsConstructor
 public class UserSecurityExpression {
+
+    private final TaskRepository taskRepository;
 
     public boolean canAccessUser(Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -29,6 +36,15 @@ public class UserSecurityExpression {
         JwtUser user = (JwtUser) authentication.getPrincipal();
         Long id = user.getId();
         return userId.equals(id);
+    }
+
+    public boolean isTaskOwner(Long taskId, Long userId) {
+        return isTaskExists(taskId) && isCorrectUserId(userId) && taskRepository.existsTaskByIdAndAndOwnerId(taskId, userId);
+    }
+
+    public boolean isTaskExists(Long id) {
+        if (!taskRepository.existsById(id)) throw new EntityNotFoundException(Task.class, id);
+        return true;
     }
 
     private boolean isAdmin(Authentication authentication) {
