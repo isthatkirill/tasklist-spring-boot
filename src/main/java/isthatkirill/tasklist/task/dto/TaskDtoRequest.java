@@ -54,7 +54,7 @@ public class TaskDtoRequest {
             groups = {OnCreate.class, OnUpdate.class})
     String status = Status.NEW.name();
 
-    @Future(message = "Task cannot expire in past")
+    @Future(message = "Task cannot expire in past", groups = {OnCreate.class, OnUpdate.class})
     @JsonFormat(pattern = Constants.DATE_PATTERN)
     LocalDateTime expiresAt;
     Boolean notify = true;

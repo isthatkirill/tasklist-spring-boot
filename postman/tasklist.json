@@ -919,28 +919,59 @@
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "task",
+			"item": [
 				{
-					"name": "get all by admin Copy",
+					"name": "create task by user 1",
 					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"title\": \"title_task_one\",\r",
+									"    \"description\": \"description_task_one\",\r",
+									"    \"priority\": \"HIGH\",\r",
+									"    \"status\": \"NEW\",\r",
+									"    \"expiresAt\": \"2024-12-12 12:12:12\",\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));\r",
+									"pm.collectionVariables.set(\"task_id\", 1);"
+								],
+								"type": "text/javascript"
+							}
+						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status 200 and json format\", function () {\r",
-									"    pm.response.to.be.ok;    \r",
+									"pm.test(\"Status 201 and json format\", function () {\r",
+									"    pm.response.to.have.status(201);  \r",
 									"    pm.response.to.be.withBody;\r",
 									"    pm.response.to.be.json;\r",
 									"});\r",
 									"\r",
 									"const target = pm.response.json()\r",
-									"const rbUser = JSON.parse(pm.collectionVariables.get(\"rbUser\"));\r",
-									"const rbAdmin = JSON.parse(pm.collectionVariables.get(\"rbAdmin\"))\r",
+									"const task = JSON.parse(pm.collectionVariables.get(\"taskBody\"));\r",
 									"\r",
 									"pm.test(\"Test field values\", function () {\r",
-									"    pm.expect(target[pm.collectionVariables.get(\"admin_id\") - 1].username).to.be.equal(rbAdmin.username);\r",
-									"    pm.expect(target[pm.collectionVariables.get(\"user_id\") - 1].username).to.be.equal(rbUser.username);\r",
-									"});"
+									"    pm.expect(target.id).to.be.equal(pm.collectionVariables.get(\"task_id\"));\r",
+									"    pm.expect(target.title).to.be.equal(task.title);\r",
+									"    pm.expect(target.description).to.be.equal(task.description);\r",
+									"    pm.expect(target.priority).to.be.equal(task.priority);\r",
+									"    pm.expect(target.status).to.be.equal(task.status);\r",
+									"    pm.expect(target.expiresAt).to.be.equal(task.expiresAt);\r",
+									"    pm.expect(target.lastModifiedAt).to.be.null;\r",
+									"    pm.expect(target.createdAt).to.be.not.null;\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"task_id\", pm.collectionVariables.get(\"task_id\") + 1);\r",
+									"pm.collectionVariables.set(\"task_id_admin\", target.id);"
 								],
 								"type": "text/javascript"
 							}
@@ -957,36 +988,96 @@
 								}
 							]
 						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:8080/api/users",
+							"raw": "localhost:8080/api/users/{{admin_id}}/tasks",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"api",
-								"users"
+								"users",
+								"{{admin_id}}",
+								"tasks"
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "task",
-			"item": [
+				},
 				{
-					"name": "create task",
+					"name": "create task by user 2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"title\": \"title_task_two\",\r",
+									"    \"description\": \"description_task_two\",\r",
+									"    \"priority\": \"LOW\",\r",
+									"    \"status\": \"NEW\",\r",
+									"    \"expiresAt\": \"2024-11-11 11:11:11\",\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 201 and json format\", function () {\r",
+									"    pm.response.to.have.status(201);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const task = JSON.parse(pm.collectionVariables.get(\"taskBody\"));\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target.id).to.be.equal(pm.collectionVariables.get(\"task_id\"));\r",
+									"    pm.expect(target.title).to.be.equal(task.title);\r",
+									"    pm.expect(target.description).to.be.equal(task.description);\r",
+									"    pm.expect(target.priority).to.be.equal(task.priority);\r",
+									"    pm.expect(target.status).to.be.equal(task.status);\r",
+									"    pm.expect(target.expiresAt).to.be.equal(task.expiresAt);\r",
+									"    pm.expect(target.lastModifiedAt).to.be.null;\r",
+									"    pm.expect(target.createdAt).to.be.not.null;\r",
+									"});\r",
+									"\r",
+									"const ids = [];\r",
+									"ids.push(target.id);\r",
+									"pm.collectionVariables.set(\"usersTaskIds\", ids);\r",
+									"\r",
+									"\r",
+									"pm.collectionVariables.set(\"task_id\", pm.collectionVariables.get(\"task_id\") + 1);\r",
+									"pm.collectionVariables.set(\"task_id_user\", target.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbm51c2hrYSIsImlkIjoyLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjk2MTg5Njc2LCJleHAiOjE2OTYxOTAyNzZ9.EigI5gOePFH3WlRjw4d0A4h79F2Hw3y7p8OkhxnlMyCiVvN7PWfmvoqsl95kH4OH4NQcbY-VeNU7Qc2YS5sHMw",
+									"value": "{{jwt_user}}",
 									"type": "string"
 								}
 							]
@@ -995,7 +1086,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"keykey\",\r\n    \"description\": \"keydescda\",\r\n    \"priority\": \"HIGH\",\r\n    \"status\": \"NEW\",\r\n    \"expiresAt\": \"2025-12-12 12:12:12\",\r\n    \"notify\": true\r\n}",
+							"raw": "{{taskBody}}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1003,7 +1094,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/users/2/tasks",
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks",
 							"host": [
 								"localhost"
 							],
@@ -1011,7 +1102,7 @@
 							"path": [
 								"api",
 								"users",
-								"2",
+								"{{user_id}}",
 								"tasks"
 							]
 						}
@@ -1019,14 +1110,407 @@
 					"response": []
 				},
 				{
-					"name": "update task",
+					"name": "create task with invalid title",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"title\": \"t\",\r",
+									"    \"description\": \"description\",\r",
+									"    \"expiresAt\": \"2024-10-10 10:10:10\",\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.be.badRequest;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbm51c2hrYSIsImlkIjoyLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjk2MTg0OTY3LCJleHAiOjE2OTYxODU1Njd9.MA0lSN84wOHzal9j5ziFXsSb_V5W0oC_18ZYeL84Fj7-07pOjZct4-ECkyIiYtTLCaBGjNa_t1Cqpe06hELPFg",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create task with invalid description",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"title\": \"title\",\r",
+									"    \"description\": \"desc\",\r",
+									"    \"expiresAt\": \"2024-10-10 10:10:10\",\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.be.badRequest;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create task with invalid priority",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"title\": \"title\",\r",
+									"    \"priority\": \"GOOD\",\r",
+									"    \"description\": \"desciption\",\r",
+									"    \"expiresAt\": \"2024-10-10 10:10:10\",\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.be.badRequest;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create task with invalid status",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"title\": \"title\",\r",
+									"    \"status\": \"GOOD\",\r",
+									"    \"description\": \"desciption\",\r",
+									"    \"expiresAt\": \"2024-10-10 10:10:10\",\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.be.badRequest;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create task with invalid expiresAt",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"title\": \"title\",\r",
+									"    \"description\": \"desciption\",\r",
+									"    \"expiresAt\": \"2022-10-10 10:10:10\",\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.be.badRequest;    \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update own task",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"expiresAt\": \"2027-10-15 10:14:32\",\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.have.status(200);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"const task = JSON.parse(pm.collectionVariables.get(\"taskBody\"));\r",
+									"\r",
+									"pm.test(\"Test field values\", function () {\r",
+									"    pm.expect(target.expiresAt).to.be.equal(task.expiresAt);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_admin}}",
 									"type": "string"
 								}
 							]
@@ -1035,7 +1519,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"title\": \"title\",\r\n    \"description\": \"description\",\r\n    \"priority\": \"DEFAULT\",\r\n    \"status\": \"DONE\",\r\n    \"createdAt\": \"2023-10-01 21:14:37\",\r\n    \"lastModifiedAt\": null,\r\n    \"expiresAt\": \"2023-12-12 12:12:12\",\r\n    \"notify\": true\r\n}",
+							"raw": "{{taskBody}}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1043,7 +1527,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/users/2/tasks/3",
+							"raw": "localhost:8080/api/users/{{admin_id}}/tasks/{{task_id_admin}}",
 							"host": [
 								"localhost"
 							],
@@ -1051,23 +1535,464 @@
 							"path": [
 								"api",
 								"users",
-								"2",
+								"{{admin_id}}",
 								"tasks",
-								"3"
+								"{{task_id_admin}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "getById",
+					"name": "update not own task",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"expiresAt\": \"2026-10-15 10:14:32\",\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 403 and json format\", function () {\r",
+									"    pm.response.to.have.status(403);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbm51c2hrYSIsImlkIjoyLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjk2MTg1MzUzLCJleHAiOjE2OTYxODU5NTN9.uxmZ0q7VIDiXJfZToRbpMeBgAzcgXvgbXWHVNJj9FR8BC11C4iM8BZP3H68IJDvGGKDcpmCMi3WWHBWL6LYuxg",
+									"value": "{{jwt_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{admin_id}}/tasks/{{task_id_user}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{admin_id}}",
+								"tasks",
+								"{{task_id_user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update with invalid title",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"title\": \"t\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.have.status(400);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks/{{task_id_user}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks",
+								"{{task_id_user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update with invalid description",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"description\": \"desc\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.have.status(400);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks/{{task_id_user}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks",
+								"{{task_id_user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update with invalid priority",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"priority\": \"GOOD\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.have.status(400);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks/{{task_id_user}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks",
+								"{{task_id_user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update with invalid status",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"status\": \"GOOD\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.have.status(400);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks/{{task_id_user}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks",
+								"{{task_id_user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update with invalid expiresAt",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requestBody = {\r",
+									"    \"expiresAt\": \"2022-10-10 10:10:10\"\r",
+									"};\r",
+									"\r",
+									"pm.collectionVariables.set(\"taskBody\", JSON.stringify(requestBody));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 and json format\", function () {\r",
+									"    pm.response.to.have.status(400);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{taskBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks/{{task_id_user}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks",
+								"{{task_id_user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.have.status(200);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json()\r",
+									"\r",
+									"pm.test(\"Check id\", function () {\r",
+									"    pm.expect(target.id).to.be.equal(pm.collectionVariables.get(\"task_id_user\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
 									"type": "string"
 								}
 							]
@@ -1075,7 +2000,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/users/1/tasks/1",
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks/{{task_id_user}}",
 							"host": [
 								"localhost"
 							],
@@ -1083,55 +2008,39 @@
 							"path": [
 								"api",
 								"users",
-								"1",
+								"{{user_id}}",
 								"tasks",
-								"1"
+								"{{task_id_user}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "delete",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJpc3RoYXRraXJpbGwiLCJpZCI6MSwicm9sZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9BRE1JTiJdLCJpYXQiOjE2OTYxODYwNzYsImV4cCI6MTY5NjE4NjY3Nn0.GPUNcicDFFW_msgviNvXhGuIqLqh9wMpfBKxZ2W5ZB_4_ZcjtDKRyYoS89UC0Mja25-ZnRfhs4qR4F6s6Jbcxg",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/users/1/tasks/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"users",
-								"1",
-								"tasks",
-								"1"
-							]
+					"name": "get by Id non existent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 404 and json format\", function () {\r",
+									"    pm.response.to.have.status(404);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "get All",
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbm51c2hrYSIsImlkIjoyLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjk2MTg5Njc2LCJleHAiOjE2OTYxOTAyNzZ9.EigI5gOePFH3WlRjw4d0A4h79F2Hw3y7p8OkhxnlMyCiVvN7PWfmvoqsl95kH4OH4NQcbY-VeNU7Qc2YS5sHMw",
+									"value": "{{jwt_user}}",
 									"type": "string"
 								}
 							]
@@ -1139,7 +2048,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/users/2/tasks?expiresBefore=2027-12-12 12:12:12",
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks/999",
 							"host": [
 								"localhost"
 							],
@@ -1147,7 +2056,211 @@
 							"path": [
 								"api",
 								"users",
-								"2",
+								"{{user_id}}",
+								"tasks",
+								"999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by Id not own",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 403 and json format\", function () {\r",
+									"    pm.response.to.have.status(403);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks/{{task_id_admin}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks",
+								"{{task_id_admin}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all with filters",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.have.status(200);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json();\r",
+									"const idList = pm.collectionVariables.get(\"usersTaskIds\");\r",
+									"const targetIdList = [];\r",
+									"\r",
+									"for (const task of target) {\r",
+									"    if (task.id) {\r",
+									"        targetIdList.push(task.id);\r",
+									"    }\r",
+									"}\r",
+									"pm.test(\"Must be correct ids\", function () {\r",
+									"    pm.expect(target).to.be.an('array');\r",
+									"    pm.expect(target).to.have.length(1);\r",
+									"    const targetIds = target.map(task => task.id);\r",
+									"    pm.expect(targetIds.every(id => idList.includes(id))).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks?keyword=two&priority=LOW&notify=true&expiresBefore=2024-12-12 12:12:12",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "two"
+								},
+								{
+									"key": "priority",
+									"value": "LOW"
+								},
+								{
+									"key": "notify",
+									"value": "true"
+								},
+								{
+									"key": "expiresBefore",
+									"value": "2024-12-12 12:12:12"
+								},
+								{
+									"key": "size",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all not own",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.have.status(403);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/{{admin_id}}/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{admin_id}}",
 								"tasks"
 							],
 							"query": [
@@ -1168,12 +2281,268 @@
 								},
 								{
 									"key": "expiresBefore",
-									"value": "2027-12-12 12:12:12"
+									"value": "2027-12-12 12:12:12",
+									"disabled": true
 								},
 								{
 									"key": "size",
 									"value": "1",
 									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 204\", function () {\r",
+									"    pm.response.to.have.status(204);  \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks/{{task_id_user}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks",
+								"{{task_id_user}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete not own",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 403\", function () {\r",
+									"    pm.response.to.have.status(403);  \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks/{{task_id_admin}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks",
+								"{{task_id_admin}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all with filters",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));\r",
+									"\r",
+									"const main = async () => {\r",
+									"    const api = new API(pm);\r",
+									"    const util = new UTIL();\r",
+									"    const path = \"/api/users/\" + pm.collectionVariables.get(\"user_id\") + \"/tasks\";\r",
+									"    const token = pm.collectionVariables.get(\"jwt_user\");\r",
+									"    const ids = [];\r",
+									"\r",
+									"    for (let i = 0; i < 3; i++) {\r",
+									"        const requestBody = {\r",
+									"            \"title\": util.generateRandomString(5),\r",
+									"            \"description\": util.generateRandomString(9),\r",
+									"            \"priority\": \"LOW\",\r",
+									"            \"status\": \"NEW\",\r",
+									"            \"notify\": true,\r",
+									"            \"expiresAt\": util.generateFutureDate(3),\r",
+									"        };\r",
+									"\r",
+									"        const currId = pm.collectionVariables.get(\"task_id\");\r",
+									"        ids.push(currId + i);\r",
+									"        pm.collectionVariables.set(\"usersTaskIds\", ids);\r",
+									"\r",
+									"        try {\r",
+									"            await api.sendRequest(\"POST\", path, requestBody, token);\r",
+									"\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        }\r",
+									"    }\r",
+									"\r",
+									"    await wait(1000);\r",
+									"\r",
+									"    for (let i = 0; i < 3; i++) {\r",
+									"        const requestBody = {\r",
+									"            \"title\": util.generateRandomString(5),\r",
+									"            \"description\": util.generateRandomString(9),\r",
+									"            \"priority\": \"HIGH\",\r",
+									"            \"status\": \"DONE\",\r",
+									"            \"notify\": true,\r",
+									"            \"expiresAt\": util.generateFutureDate(3),\r",
+									"        };\r",
+									"\r",
+									"        try {\r",
+									"            await api.sendRequest(\"POST\", path, requestBody, token);\r",
+									"        } catch (e) {\r",
+									"            console.error(e);\r",
+									"        }  \r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"const interval = setInterval(() => { }, 1000);\r",
+									"\r",
+									"setTimeout(async () => {\r",
+									"    try {\r",
+									"        await main();\r",
+									"    } catch (e) {\r",
+									"        console.error(e);\r",
+									"    } finally {\r",
+									"        clearInterval(interval);\r",
+									"    }\r",
+									"},\r",
+									"    100\r",
+									");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 and json format\", function () {\r",
+									"    pm.response.to.have.status(200);  \r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const target = pm.response.json();\r",
+									"const idList = pm.collectionVariables.get(\"usersTaskIds\");\r",
+									"const targetIdList = [];\r",
+									"\r",
+									"for (const task of target) {\r",
+									"    if (task.id) {\r",
+									"        targetIdList.push(task.id);\r",
+									"    }\r",
+									"}\r",
+									"\r",
+									"pm.test(\"Must be correct ids\", function () {\r",
+									"    pm.expect(target).to.be.an('array');\r",
+									"    pm.expect(target).to.have.length(3);\r",
+									"    const targetIds = target.map(task => task.id);\r",
+									"    pm.expect(targetIds.every(id => idList.includes(id))).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/users/{{user_id}}/tasks?priority=LOW&notify=true&expiresBefore=2031-12-12 12:12:12&status=NEW",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}",
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "keyword",
+									"disabled": true
+								},
+								{
+									"key": "priority",
+									"value": "LOW"
+								},
+								{
+									"key": "notify",
+									"value": "true"
+								},
+								{
+									"key": "expiresBefore",
+									"value": "2031-12-12 12:12:12"
+								},
+								{
+									"key": "status",
+									"value": "NEW"
 								},
 								{
 									"key": "from",
@@ -1194,6 +2563,61 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
+					"API = class {",
+					"    constructor(postman, baseUrl = \"http://localhost:8080\") {",
+					"        this.baseUrl = baseUrl;",
+					"        this.pm = postman;",
+					"    }",
+					"",
+					"    async sendRequest(method, path, body, token) {",
+					"        const request = {",
+					"                url: this.baseUrl + path,",
+					"                method: method,",
+					"                body: JSON.stringify(body),",
+					"                header: {",
+					"                \"Content-Type\": \"application/json\",",
+					"                \"Authorization\": \"Bearer \" + token,",
+					"            },",
+					"        };",
+					"",
+					"        this.pm.sendRequest(request, (error, response) => {",
+					"            response.json();",
+					"        });",
+					"           ",
+					"    }",
+					"",
+					"}",
+					"",
+					"UTIL = class {",
+					"    generateRandomString(length) {",
+					"        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';",
+					"        let result = '';",
+					"        for (let i = 0; i < length; i++) {",
+					"            result += characters.charAt(Math.floor(Math.random() * characters.length));",
+					"        }",
+					"        return result;",
+					"    }",
+					"",
+					"",
+					"    getRandomPriority() {",
+					"        const priorities = [\"LOW\", \"MEDIUM\", \"HIGH\"];",
+					"        return priorities[Math.floor(Math.random() * priorities.length)];",
+					"    }",
+					"",
+					"",
+					"    getRandomStatus() {",
+					"        const statuses = [\"NEW\", \"IN_PROGRESS\", \"DONE\"];",
+					"        return statuses[Math.floor(Math.random() * statuses.length)];",
+					"    }",
+					"",
+					"",
+					"    generateFutureDate(length) {",
+					"        const futureDate = new Date();",
+					"        futureDate.setFullYear(futureDate.getFullYear() + Math.floor(Math.random() * 5) + length);",
+					"        const formattedDate = futureDate.toISOString().replace(/T/, ' ').replace(/\\..+/, '');",
+					"        return formattedDate;",
+					"    }",
+					"}",
 					""
 				]
 			}
@@ -1262,6 +2686,35 @@
 		{
 			"key": "requestBody",
 			"value": ""
+		},
+		{
+			"key": "task_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "taskBody ",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "task_id_admin",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "task_id_user",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "taskBody",
+			"value": ""
+		},
+		{
+			"key": "usersTaskIds",
+			"value": "",
+			"type": "string"
 		}
 	]
 }

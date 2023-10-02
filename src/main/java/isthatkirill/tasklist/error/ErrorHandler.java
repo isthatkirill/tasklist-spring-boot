@@ -93,7 +93,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse invalidArgumentHandle(final MethodArgumentTypeMismatchException e) {
         String errorMessage = String.format("Invalid argument type. Check the request parameters. Required Type: %s, " +
-                "invalid value: %s", e.getRequiredType().getName(), e.getValue());;
+                "invalid value: %s", e.getRequiredType().getName(), e.getValue());
         log.error("Error: {} Description: {}", HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
         return new ErrorResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(), errorMessage);
     }
