@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://db:5432/tasklist-ss?currentSchema=public
+    username: postgres
+    password: admin
+
+  sql:
+    init:
+      mode: never
+      continue-on-error: false
+
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yaml
+    enabled: true
+    default-schema: public
+
+security:
+  jwt:
+    secret: cnczclEzUnEzclEzUnFyUVJHU0RHWkdaR0ZHRkdGREdnZGdzZ2FlZ2FlZ2FlZ2ZkZ2FnZWRmZ2RqeXVreXVreXVreXVr
+    access: 6000000
+    refresh: 1296000000
