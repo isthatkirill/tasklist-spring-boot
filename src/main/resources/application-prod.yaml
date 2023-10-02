@@ -1,14 +1,12 @@
 spring:
+  config:
+    import: optional:file:.env
+
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://db:5432/tasklist-ss?currentSchema=public
-    username: postgres
-    password: admin
-
-  sql:
-    init:
-      mode: never
-      continue-on-error: false
+    url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}?currentSchema=public
+    username: ${DB_USER}
+    password: ${DB_PASS}
 
   liquibase:
     change-log: classpath:liquibase/db.changelog.yaml
@@ -17,6 +15,6 @@ spring:
 
 security:
   jwt:
-    secret: cnczclEzUnEzclEzUnFyUVJHU0RHWkdaR0ZHRkdGREdnZGdzZ2FlZ2FlZ2FlZ2ZkZ2FnZWRmZ2RqeXVreXVreXVreXVr
-    access: 6000000
-    refresh: 1296000000
+    secret: ${SECRET}
+    access: ${ACCESS}
+    refresh: ${REFRESH}
