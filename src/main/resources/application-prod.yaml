@@ -1,0 +1,20 @@
+spring:
+  config:
+    import: optional:file:.env
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}?currentSchema=public
+    username: ${DB_USER}
+    password: ${DB_PASS}
+
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yaml
+    enabled: true
+    default-schema: public
+
+security:
+  jwt:
+    secret: ${SECRET}
+    access: ${ACCESS}
+    refresh: ${REFRESH}

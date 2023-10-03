@@ -1,15 +1,19 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/tasklist-ss
+    url: jdbc:postgresql://localhost:5432/tasklist-ss?currentSchema=public
     username: postgres
     password: admin
 
   sql:
     init:
-      mode: always
-      data-locations: classpath:data.sql
-      continue-on-error: true
+      mode: never
+      continue-on-error: false
+
+  liquibase:
+    change-log: classpath:liquibase/db.changelog.yaml
+    enabled: true
+    default-schema: public
 
 security:
   jwt:
