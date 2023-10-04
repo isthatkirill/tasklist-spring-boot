@@ -1,0 +1,30 @@
+name: postman-on-docker
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: build docker-compose
+        run: docker-compose -f "docker-compose.yaml" build
+      - name: docker-compose up
+        run: docker-compose -f "docker-compose.yaml" up -d
+
+      - name: install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "18.x"
+      - name: install newman
+        run: |
+          npm install -g newman
+      - name: run POSTMAN collection
+        run: |
+          cd postman
+          newman run tasklist.json
+
+      - name: docker-compose down
+        run: docker-compose -f "docker-compose.yaml" down

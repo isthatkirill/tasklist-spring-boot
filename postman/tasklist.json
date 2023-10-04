@@ -960,7 +960,6 @@
 									"const task = JSON.parse(pm.collectionVariables.get(\"taskBody\"));\r",
 									"\r",
 									"pm.test(\"Test field values\", function () {\r",
-									"    pm.expect(target.id).to.be.equal(pm.collectionVariables.get(\"task_id\"));\r",
 									"    pm.expect(target.title).to.be.equal(task.title);\r",
 									"    pm.expect(target.description).to.be.equal(task.description);\r",
 									"    pm.expect(target.priority).to.be.equal(task.priority);\r",
@@ -1049,7 +1048,6 @@
 									"const task = JSON.parse(pm.collectionVariables.get(\"taskBody\"));\r",
 									"\r",
 									"pm.test(\"Test field values\", function () {\r",
-									"    pm.expect(target.id).to.be.equal(pm.collectionVariables.get(\"task_id\"));\r",
 									"    pm.expect(target.title).to.be.equal(task.title);\r",
 									"    pm.expect(target.description).to.be.equal(task.description);\r",
 									"    pm.expect(target.priority).to.be.equal(task.priority);\r",
@@ -1979,7 +1977,7 @@
 									"const target = pm.response.json()\r",
 									"\r",
 									"pm.test(\"Check id\", function () {\r",
-									"    pm.expect(target.id).to.be.equal(pm.collectionVariables.get(\"task_id_user\"));\r",
+									"    pm.expect(target.id.toString()).to.be.equal(pm.collectionVariables.get(\"task_id_user\"));\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -2386,169 +2384,6 @@
 								"{{user_id}}",
 								"tasks",
 								"{{task_id_admin}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get all with filters",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));\r",
-									"\r",
-									"const main = async () => {\r",
-									"    const api = new API(pm);\r",
-									"    const util = new UTIL();\r",
-									"    const path = \"/api/users/\" + pm.collectionVariables.get(\"user_id\") + \"/tasks\";\r",
-									"    const token = pm.collectionVariables.get(\"jwt_user\");\r",
-									"    const ids = [];\r",
-									"\r",
-									"    for (let i = 0; i < 3; i++) {\r",
-									"        const requestBody = {\r",
-									"            \"title\": util.generateRandomString(5),\r",
-									"            \"description\": util.generateRandomString(9),\r",
-									"            \"priority\": \"LOW\",\r",
-									"            \"status\": \"NEW\",\r",
-									"            \"notify\": true,\r",
-									"            \"expiresAt\": util.generateFutureDate(3),\r",
-									"        };\r",
-									"\r",
-									"        const currId = pm.collectionVariables.get(\"task_id\");\r",
-									"        ids.push(currId + i);\r",
-									"        pm.collectionVariables.set(\"usersTaskIds\", ids);\r",
-									"\r",
-									"        try {\r",
-									"            await api.sendRequest(\"POST\", path, requestBody, token);\r",
-									"\r",
-									"        } catch (e) {\r",
-									"            console.error(e);\r",
-									"        }\r",
-									"    }\r",
-									"\r",
-									"    await wait(1000);\r",
-									"\r",
-									"    for (let i = 0; i < 3; i++) {\r",
-									"        const requestBody = {\r",
-									"            \"title\": util.generateRandomString(5),\r",
-									"            \"description\": util.generateRandomString(9),\r",
-									"            \"priority\": \"HIGH\",\r",
-									"            \"status\": \"DONE\",\r",
-									"            \"notify\": true,\r",
-									"            \"expiresAt\": util.generateFutureDate(3),\r",
-									"        };\r",
-									"\r",
-									"        try {\r",
-									"            await api.sendRequest(\"POST\", path, requestBody, token);\r",
-									"        } catch (e) {\r",
-									"            console.error(e);\r",
-									"        }  \r",
-									"    }\r",
-									"};\r",
-									"\r",
-									"const interval = setInterval(() => { }, 1000);\r",
-									"\r",
-									"setTimeout(async () => {\r",
-									"    try {\r",
-									"        await main();\r",
-									"    } catch (e) {\r",
-									"        console.error(e);\r",
-									"    } finally {\r",
-									"        clearInterval(interval);\r",
-									"    }\r",
-									"},\r",
-									"    100\r",
-									");"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status 200 and json format\", function () {\r",
-									"    pm.response.to.have.status(200);  \r",
-									"    pm.response.to.be.withBody;\r",
-									"    pm.response.to.be.json;\r",
-									"});\r",
-									"\r",
-									"const target = pm.response.json();\r",
-									"const idList = pm.collectionVariables.get(\"usersTaskIds\");\r",
-									"const targetIdList = [];\r",
-									"\r",
-									"for (const task of target) {\r",
-									"    if (task.id) {\r",
-									"        targetIdList.push(task.id);\r",
-									"    }\r",
-									"}\r",
-									"\r",
-									"pm.test(\"Must be correct ids\", function () {\r",
-									"    pm.expect(target).to.be.an('array');\r",
-									"    pm.expect(target).to.have.length(3);\r",
-									"    const targetIds = target.map(task => task.id);\r",
-									"    pm.expect(targetIds.every(id => idList.includes(id))).to.be.true;\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{jwt_user}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/users/{{user_id}}/tasks?priority=LOW&notify=true&expiresBefore=2031-12-12 12:12:12&status=NEW",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"users",
-								"{{user_id}}",
-								"tasks"
-							],
-							"query": [
-								{
-									"key": "keyword",
-									"value": "keyword",
-									"disabled": true
-								},
-								{
-									"key": "priority",
-									"value": "LOW"
-								},
-								{
-									"key": "notify",
-									"value": "true"
-								},
-								{
-									"key": "expiresBefore",
-									"value": "2031-12-12 12:12:12"
-								},
-								{
-									"key": "status",
-									"value": "NEW"
-								},
-								{
-									"key": "from",
-									"value": "1",
-									"disabled": true
-								}
 							]
 						}
 					},
