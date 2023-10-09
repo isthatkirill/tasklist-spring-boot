@@ -15,6 +15,12 @@ spring:
     enabled: true
     default-schema: public
 
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
 security:
   jwt:
     secret: cnczclEzUnEzclEzUnFyUVJHU0RHWkdaR0ZHRkdGREdnZGdzZ2FlZ2FlZ2FlZ2ZkZ2FnZWRmZ2RqeXVreXVreXVreXVr
