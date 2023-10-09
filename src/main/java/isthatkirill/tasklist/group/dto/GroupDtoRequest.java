@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +39,6 @@ public class GroupDtoRequest {
     )
     String description;
 
-    List<Long> taskIds;
+    List<Long> taskIds = new ArrayList<>();
 
 }

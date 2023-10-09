@@ -1,6 +1,7 @@
 package isthatkirill.tasklist.group.model;
 
 import isthatkirill.tasklist.task.model.Task;
+import isthatkirill.tasklist.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -30,15 +31,21 @@ public class Group {
     @Column(name = "title", nullable = false, length = 128)
     String title;
 
-    @Column(name = "desciption", nullable = false, length = 512)
+    @Column(name = "description", nullable = false, length = 512)
     String description;
 
-    @Column(name = "progress", nullable = false, length = 32)
-    String progress;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    User owner;
 
-    @OneToMany
-    @JoinColumn(name = "task_id", referencedColumnName = "id")
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @ManyToMany
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinTable(
+            name = "tasks_groups",
+            joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id")
+    )
     List<Task> tasks;
 
 }
