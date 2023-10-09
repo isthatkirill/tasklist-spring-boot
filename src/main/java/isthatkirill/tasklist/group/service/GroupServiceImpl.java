@@ -32,7 +32,6 @@ public class GroupServiceImpl implements GroupService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
-
     @Override
     @Transactional
     public GroupDtoResponse create(GroupDtoRequest groupDtoRequest, Long userId) {
@@ -56,7 +55,6 @@ public class GroupServiceImpl implements GroupService {
         return groupDtoResponse;
     }
 
-
     private String computeProgress(List<Task> tasks) {
         return tasks.stream()
                 .filter(t -> t.getStatus().equals(Status.DONE.name()))
@@ -77,7 +75,6 @@ public class GroupServiceImpl implements GroupService {
     private Group checkIfGroupExistsAndGet(Long id) {
         return groupRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, id));
-        //TODO ADD COMPUTIMNG PROGRESS
     }
 
 }
