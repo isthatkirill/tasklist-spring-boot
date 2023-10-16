@@ -60,8 +60,10 @@ public class GroupServiceImpl implements GroupService {
         group.setTasks(tasks);
         GroupDtoResponse groupDtoResponse = groupMapper.toGroupDtoResponse(groupRepository.save(group));
         groupDtoResponse.setProgress(computeProgress(tasks));
+        log.info("User id={} updated group={}", userId, groupDtoResponse);
         return groupDtoResponse;
     }
+
 
     @Override
     @Transactional
@@ -74,6 +76,7 @@ public class GroupServiceImpl implements GroupService {
         group.setTasks(tasks);
         GroupDtoResponse groupDtoResponse = groupMapper.toGroupDtoResponse(groupRepository.save(group));
         groupDtoResponse.setProgress(computeProgress(tasks));
+        log.info("User id={} added task id={} in group id={}", userId, taskId, groupId);
         return groupDtoResponse;
     }
 
@@ -87,7 +90,16 @@ public class GroupServiceImpl implements GroupService {
         group.setTasks(tasks);
         GroupDtoResponse groupDtoResponse = groupMapper.toGroupDtoResponse(groupRepository.save(group));
         groupDtoResponse.setProgress(computeProgress(tasks));
+        log.info("User id={} deleted task id={} from group id={}", userId, taskId, groupId);
         return groupDtoResponse;
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long groupId) {
+        checkIfGroupExistsAndGet(groupId);
+        groupRepository.deleteById(groupId);
+        log.info("Group id={} deleted", groupId);
     }
 
 

@@ -2,7 +2,6 @@ package isthatkirill.tasklist.group.service;
 
 import isthatkirill.tasklist.group.dto.GroupDtoRequest;
 import isthatkirill.tasklist.group.dto.GroupDtoResponse;
-import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * @author Kirill Emelyanov
@@ -17,6 +16,8 @@ public interface GroupService {
     GroupDtoResponse addTaskInGroup(Long userId, Long groupId, Long taskId);
 
     GroupDtoResponse deleteTaskFromGroup(Long userId, Long groupId, Long taskId);
+
+    void delete(Long groupId);
 
     GroupDtoResponse getById(Long groupId);
 

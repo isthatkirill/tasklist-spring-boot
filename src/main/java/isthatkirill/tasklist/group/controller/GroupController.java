@@ -39,6 +39,13 @@ public class GroupController {
         return groupService.update(groupDtoRequest, groupId, userId);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{groupId}")
+    @PreAuthorize("@userSecurityExpression.isGroupOwner(#groupId, #userId)")
+    public void delete(@PathVariable Long userId, @PathVariable Long groupId) {
+        groupService.delete(groupId);
+    }
+
     @PatchMapping("/{groupId}/join/{taskId}")
     @PreAuthorize("@userSecurityExpression.isGroupOwner(#groupId, #userId) && @userSecurityExpression.isTaskOwner(#taskId, #userId)")
     public GroupDtoResponse addTaskInGroup(@PathVariable Long userId,
@@ -50,8 +57,8 @@ public class GroupController {
     @DeleteMapping("/{groupId}/delete/{taskId}")
     @PreAuthorize("@userSecurityExpression.isGroupOwner(#groupId, #userId) && @userSecurityExpression.isTaskOwner(#taskId, #userId)")
     public GroupDtoResponse deleteTaskFromGroup(@PathVariable Long userId,
-                                           @PathVariable Long groupId,
-                                           @PathVariable Long taskId) {
+                                                @PathVariable Long groupId,
+                                                @PathVariable Long taskId) {
         return groupService.deleteTaskFromGroup(userId, groupId, taskId);
     }
 
