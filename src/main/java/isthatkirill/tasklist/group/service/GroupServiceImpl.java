@@ -46,6 +46,24 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional
+    public GroupDtoResponse update(GroupDtoRequest groupDtoRequest, Long groupId, Long userId) {
+        Group group = checkIfGroupExistsAndGet(groupId);
+        if (groupDtoRequest.getTitle() != null) {
+            group.setTitle(groupDtoRequest.getTitle());
+        }
+        if (groupDtoRequest.getDescription() != null) {
+            group.setDescription(groupDtoRequest.getDescription());
+        }
+        List<Task> tasks = taskRepository.findTasksByIdInAndOwnerId(groupDtoRequest.getTaskIds(), userId);
+        group.setTasks(tasks);
+        GroupDtoResponse groupDtoResponse = groupMapper.toGroupDtoResponse(groupRepository.save(group));
+        groupDtoResponse.setProgress(computeProgress(tasks));
+        return groupDtoResponse;
+    }
+
+
+    @Override
     @Transactional(readOnly = true)
     public GroupDtoResponse getById(Long groupId) {
         Group group = checkIfGroupExistsAndGet(groupId);
