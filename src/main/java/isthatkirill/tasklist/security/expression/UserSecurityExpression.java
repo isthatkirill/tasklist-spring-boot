@@ -1,6 +1,8 @@
 package isthatkirill.tasklist.security.expression;
 
 import isthatkirill.tasklist.error.exception.entity.EntityNotFoundException;
+import isthatkirill.tasklist.group.model.Group;
+import isthatkirill.tasklist.group.repository.GroupRepository;
 import isthatkirill.tasklist.security.model.JwtUser;
 import isthatkirill.tasklist.task.model.Task;
 import isthatkirill.tasklist.task.repository.TaskRepository;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class UserSecurityExpression {
 
     private final TaskRepository taskRepository;
+    private final GroupRepository groupRepository;
 
     public boolean canAccessUser(Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,7 +45,16 @@ public class UserSecurityExpression {
         return isTaskExists(taskId) && isCorrectUserId(userId) && taskRepository.existsTaskByIdAndAndOwnerId(taskId, userId);
     }
 
-    public boolean isTaskExists(Long id) {
+    public boolean isGroupOwner(Long groupId, Long userId) {
+        return isGroupExists(groupId) && isCorrectUserId(userId) && groupRepository.existsGroupByIdAndOwnerId(groupId, userId);
+    }
+
+    private boolean isGroupExists(Long id) {
+        if (!groupRepository.existsById(id)) throw new EntityNotFoundException(Group.class, id);
+        return true;
+    }
+
+    private boolean isTaskExists(Long id) {
         if (!taskRepository.existsById(id)) throw new EntityNotFoundException(Task.class, id);
         return true;
     }

@@ -1,5 +1,6 @@
-package isthatkirill.tasklist.task.model;
+package isthatkirill.tasklist.group.model;
 
+import isthatkirill.tasklist.task.model.Task;
 import isthatkirill.tasklist.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,20 +8,21 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Kirill Emelyanov
  */
 
-@Data
+@Getter
+@Setter
 @Entity
 @Builder
-@Table(name = "tasks")
+@Table(name = "groups")
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Task {
+public class Group {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,27 +34,18 @@ public class Task {
     @Column(name = "description", nullable = false, length = 512)
     String description;
 
-    @Column(name = "priority", nullable = false)
-    String priority;
-
-    @Column(name = "status", nullable = false)
-    String status;
-
-    @Column(name = "created_at", nullable = false)
-    LocalDateTime createdAt;
-
-    @Column(name = "expires_at", nullable = false)
-    LocalDateTime expiresAt;
-
-    @Column(name = "last_modified_at")
-    LocalDateTime lastModifiedAt;
-
-    @Column(name = "notify", nullable = false)
-    Boolean notify;
-
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     User owner;
+
+    @ManyToMany
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinTable(
+            name = "tasks_groups",
+            joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id")
+    )
+    List<Task> tasks;
 
 }

@@ -1,19 +1,14 @@
-package isthatkirill.tasklist.task.dto;
+package isthatkirill.tasklist.group.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import isthatkirill.tasklist.task.model.enums.Priority;
-import isthatkirill.tasklist.task.model.enums.Status;
-import isthatkirill.tasklist.util.Constants;
 import isthatkirill.tasklist.validation.OnCreate;
 import isthatkirill.tasklist.validation.OnUpdate;
-import isthatkirill.tasklist.validation.annotation.ValidEnum;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Kirill Emelyanov
@@ -21,10 +16,10 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TaskDtoRequest {
+public class GroupDtoRequest {
 
     @NotBlank(message = "Title cannot be blank", groups = OnCreate.class)
     @Size(
@@ -44,17 +39,6 @@ public class TaskDtoRequest {
     )
     String description;
 
-    @ValidEnum(enumClass = Priority.class,
-            groups = {OnCreate.class, OnUpdate.class})
-    String priority = Priority.DEFAULT.name();
-
-    @ValidEnum(enumClass = Status.class,
-            groups = {OnCreate.class, OnUpdate.class})
-    String status = Status.NEW.name();
-
-    @Future(message = "Task cannot expire in past", groups = {OnCreate.class, OnUpdate.class})
-    @JsonFormat(pattern = Constants.DATE_PATTERN)
-    LocalDateTime expiresAt;
-    Boolean notify = true;
+    List<Long> taskIds = new ArrayList<>();
 
 }
