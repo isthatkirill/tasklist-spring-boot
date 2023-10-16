@@ -15,7 +15,7 @@ public class EntityNotFoundException extends RuntimeException {
     }
 
     public EntityNotFoundException(Class<?> entityClass, String entityName) {
-        super("Entity " + entityClass.getSimpleName() + " not found. Name=" + entityName);
+        super("Entity " + entityClass.getSimpleName() + " not found. " + entityName);
     }
 
 }

@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
  * @author Kirill Emelyanov
  */
 
-@Getter
-@Setter
+@Data
 @Entity
 @Builder
 @Table(name = "tasks")

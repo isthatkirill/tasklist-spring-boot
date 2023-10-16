@@ -56,6 +56,34 @@ public class GroupServiceImpl implements GroupService {
             group.setDescription(groupDtoRequest.getDescription());
         }
         List<Task> tasks = taskRepository.findTasksByIdInAndOwnerId(groupDtoRequest.getTaskIds(), userId);
+        checkIfAllTasksFound(tasks.size(), groupDtoRequest.getTaskIds().size());
+        group.setTasks(tasks);
+        GroupDtoResponse groupDtoResponse = groupMapper.toGroupDtoResponse(groupRepository.save(group));
+        groupDtoResponse.setProgress(computeProgress(tasks));
+        return groupDtoResponse;
+    }
+
+    @Override
+    @Transactional
+    public GroupDtoResponse addTaskInGroup(Long userId, Long groupId, Long taskId) {
+        Group group = checkIfGroupExistsAndGet(groupId);
+        Task joinTask = checkIfTaskExistsAndGet(taskId);
+        List<Task> tasks = group.getTasks();
+        checkIfAlreadyExists(tasks, joinTask);
+        tasks.add(joinTask);
+        group.setTasks(tasks);
+        GroupDtoResponse groupDtoResponse = groupMapper.toGroupDtoResponse(groupRepository.save(group));
+        groupDtoResponse.setProgress(computeProgress(tasks));
+        return groupDtoResponse;
+    }
+
+    @Override
+    @Transactional
+    public GroupDtoResponse deleteTaskFromGroup(Long userId, Long groupId, Long taskId) {
+        Group group = checkIfGroupExistsAndGet(groupId);
+        Task taskToDel = checkIfTaskExistsAndGet(taskId);
+        List<Task> tasks = group.getTasks();
+        tasks.remove(taskToDel);
         group.setTasks(tasks);
         GroupDtoResponse groupDtoResponse = groupMapper.toGroupDtoResponse(groupRepository.save(group));
         groupDtoResponse.setProgress(computeProgress(tasks));
@@ -85,6 +113,10 @@ public class GroupServiceImpl implements GroupService {
         }
     }
 
+    private void checkIfAlreadyExists(List<Task> tasks, Task joinTask) {
+        if (tasks.contains(joinTask)) throw new IllegalStateException("Task already exists in current group.");
+    }
+
     private User checkIfUserExistsAndGet(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, id));
@@ -93,6 +125,11 @@ public class GroupServiceImpl implements GroupService {
     private Group checkIfGroupExistsAndGet(Long id) {
         return groupRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, id));
+    }
+
+    private Task checkIfTaskExistsAndGet(Long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Task.class, id));
     }
 
 }
