@@ -1,4 +1,4 @@
-<#ftl encoding="UTF">
+<#ftl encoding="UTF-8">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -33,7 +33,7 @@
 <body>
 <div id="body">
     <div id="div">
-        <h1 style="text-align: center">Reminder</h1>
+        <h2 style="text-align: center">Reminder</h2>
         <p>Hello, ${name}!</p>
         <p>One of your tasks is approaching the deadline. There is only 1 hour left!</p>
         <div>

@@ -26,7 +26,7 @@ public class ReminderImpl implements Reminder {
     private final Duration duration = Duration.ofHours(1);
 
     @Override
-    @Scheduled(cron = "0 * * * * *")
+    //@Scheduled(cron = "0 * * * * *")
     public void remind() {
         List<Task> tasks = taskService.getAllSoonTasks(duration);
         tasks.forEach(task -> {

@@ -1,4 +1,4 @@
-<#ftl encoding="UTF">
+<#ftl encoding="UTF-8">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -33,7 +33,7 @@
 <body>
 <div id="body">
     <div id="div">
-        <h1 style="text-align: center">Registration</h1>
+        <h2 style="text-align: center">Registration</h2>
         <p>Hello, ${name}!</p>
         <p>You have successfully registered in the application!</p>
         <p>If you have any questions, please contact me in the telegram</p>
