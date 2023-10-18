@@ -2,6 +2,8 @@ package isthatkirill.tasklist.user.service;
 
 import isthatkirill.tasklist.error.exception.entity.EntityNotFoundException;
 import isthatkirill.tasklist.error.exception.entity.NotUniqueException;
+import isthatkirill.tasklist.mail.model.MailType;
+import isthatkirill.tasklist.mail.service.MailService;
 import isthatkirill.tasklist.user.dto.UserDto;
 import isthatkirill.tasklist.user.mapper.UserMapper;
 import isthatkirill.tasklist.user.model.Role;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -28,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
 
     @Override
     @Transactional
@@ -37,6 +41,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setRoles(Set.of(Role.ROLE_USER));
         user = userRepository.save(user);
+        mailService.sendEmail(user, MailType.REGISTRATION, new Properties());
         log.info("New user added --> {}", userDto);
         return userMapper.toUserDto(user);
     }
