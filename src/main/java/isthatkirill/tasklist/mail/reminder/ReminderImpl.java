@@ -4,7 +4,6 @@ import isthatkirill.tasklist.mail.model.MailType;
 import isthatkirill.tasklist.mail.service.MailService;
 import isthatkirill.tasklist.task.model.Task;
 import isthatkirill.tasklist.task.service.TaskService;
-import isthatkirill.tasklist.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -21,7 +21,7 @@ import java.util.Properties;
 
 @Service
 @RequiredArgsConstructor
-public class MailServiceImpl implements  MailService {
+public class MailServiceImpl implements MailService {
 
     private final Configuration configuration;
     private final JavaMailSender mailSender;
@@ -32,7 +32,8 @@ public class MailServiceImpl implements  MailService {
         switch (type) {
             case REGISTRATION -> sendRegistrationEmail(user);
             case REMINDER -> sendReminderEmail(user, params);
-            default -> {}
+            default -> {
+            }
         }
     }
 
