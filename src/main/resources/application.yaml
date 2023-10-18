@@ -5,11 +5,6 @@ spring:
     username: postgres
     password: admin
 
-  sql:
-    init:
-      mode: never
-      continue-on-error: false
-
   liquibase:
     change-log: classpath:liquibase/db.changelog.yaml
     enabled: true
@@ -20,6 +15,21 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: springboot392@gmail.com
+    password: mybrjgaugakxfkyd
+    properties:
+      mail:
+        debug: false
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 security:
   jwt:

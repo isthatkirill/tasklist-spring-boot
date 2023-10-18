@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -73,10 +74,17 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDtoResponse> getAll(Long userId, String keyword, String priority, String status,
                                         LocalDateTime expiresBefore, Boolean notify, Integer from, Integer size) {
         log.info("User id={} requested all his tasks with filtering params: keyword={}, priority={}, status={}, " +
-                "expiresBefore={}, notify={}, from={}, size={}");
+                        "expiresBefore={}, notify={}, from={}, size={}", userId, keyword, priority, status, expiresBefore,
+                notify, from, size);
         return taskMapper.toTaskDtoResponse(
                 taskRepository.getAllTasks(userId, keyword, priority, status, expiresBefore, notify, from, size)
         );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Task> getAllSoonTasks(Duration duration) {
+        return taskRepository.findAllSoonTasks(LocalDateTime.now().plus(duration));
     }
 
     private Task checkIfTaskExistsAndGet(Long id) {

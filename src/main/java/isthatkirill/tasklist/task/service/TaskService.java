@@ -2,7 +2,9 @@ package isthatkirill.tasklist.task.service;
 
 import isthatkirill.tasklist.task.dto.TaskDtoRequest;
 import isthatkirill.tasklist.task.dto.TaskDtoResponse;
+import isthatkirill.tasklist.task.model.Task;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,5 +24,7 @@ public interface TaskService {
 
     List<TaskDtoResponse> getAll(Long userId, String keyword, String priority, String status, LocalDateTime expiresBefore,
                                  Boolean notify, Integer from, Integer size);
+
+    List<Task> getAllSoonTasks(Duration duration);
 
 }
