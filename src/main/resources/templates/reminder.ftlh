@@ -42,9 +42,9 @@
             <p>Description: ${description}</p>
             <p>Task status is ${status}</p>
         </div>
-        <p>More information about the task is available in the application</p>
-        <p>If you have any questions, please contact me in the telegram</p>
-        <p>Sincerely, <br>Kirill </p> <br>
+        <p>More information about the task is available in the application.</p>
+        <p>If you have any questions, please contact me in the telegram.</p>
+        <p>Sincerely, <br>Kirill. </p> <br>
         <a id="a" href="http://t.me/isthatkirill">Telegram</a>
     </div>
 </div>

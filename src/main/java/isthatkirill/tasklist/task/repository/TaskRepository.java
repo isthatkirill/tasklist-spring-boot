@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -20,11 +21,9 @@ public interface TaskRepository extends JpaRepository<Task, Long>, CriteriaTaskR
 
     List<Task> findTasksByIdInAndOwnerId(List<Long> ids, Long userId);
 
-    @Query(value = """
-            SELECT * FROM tasks t
-            WHERE t.notify is true
-            AND t.expires_at between NOW() and :end
-            """, nativeQuery = true)
-    List<Task> findAllSoonTasks(@Param("end") Timestamp end);
+    @Query("SELECT t FROM Task t " +
+            "WHERE t.notify = true " +
+            "AND t.expiresAt BETWEEN CURRENT_TIMESTAMP AND :end")
+    List<Task> findAllSoonTasks(@Param("end") LocalDateTime end);
 
 }

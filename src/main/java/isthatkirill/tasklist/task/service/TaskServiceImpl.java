@@ -85,7 +85,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<Task> getAllSoonTasks(Duration duration) {
-        return taskRepository.findAllSoonTasks(Timestamp.valueOf(LocalDateTime.now().plus(duration)));
+        return taskRepository.findAllSoonTasks(LocalDateTime.now().plus(duration));
     }
 
     private Task checkIfTaskExistsAndGet(Long id) {

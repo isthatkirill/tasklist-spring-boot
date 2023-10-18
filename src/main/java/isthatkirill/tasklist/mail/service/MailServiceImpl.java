@@ -75,6 +75,7 @@ public class MailServiceImpl implements  MailService {
         map.put("name", user.getName());
         map.put("title", params.getProperty("task.title"));
         map.put("description", params.getProperty("task.description"));
+        map.put("status", params.getProperty("task.status"));
         configuration.getTemplate("reminder.ftlh")
                 .process(map, writer);
         return writer.getBuffer().toString();
