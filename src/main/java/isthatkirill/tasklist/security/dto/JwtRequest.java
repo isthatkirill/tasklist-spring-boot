@@ -1,8 +1,7 @@
 package isthatkirill.tasklist.security.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AccessLevel;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.validator.constraints.Length;
 
@@ -11,6 +10,9 @@ import org.hibernate.validator.constraints.Length;
  */
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class JwtRequest {
 
