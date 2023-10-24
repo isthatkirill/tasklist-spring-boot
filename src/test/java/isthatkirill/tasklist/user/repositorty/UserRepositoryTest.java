@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @ActiveProfiles("test")
 @DataJpaTest
-@Sql(value = "/scripts/users.sql")
+@Sql(value = {"/scripts/drop.sql", "/scripts/init.sql", "/scripts/users.sql"})
 class UserRepositoryTest {
 
     @Autowired
@@ -31,20 +31,20 @@ class UserRepositoryTest {
 
         assertThat(optionalUser).isPresent()
                 .get()
-                .extracting(User::getUsername)
-                .isEqualTo(username);
+                .hasFieldOrPropertyWithValue("username", username)
+                .hasFieldOrPropertyWithValue("id", 1L);
     }
 
     @Test
-    void findByEmailOrUsername() {
+    void findByEmailTest() {
         String email = "annushka@yahoo.com";
 
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
         assertThat(optionalUser).isPresent()
                 .get()
-                .extracting(User::getEmail)
-                .isEqualTo(email);
+                .hasFieldOrPropertyWithValue("email", email)
+                .hasFieldOrPropertyWithValue("id", 2L);
     }
 
 }
