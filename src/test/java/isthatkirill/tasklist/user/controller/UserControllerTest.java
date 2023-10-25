@@ -5,7 +5,6 @@ import isthatkirill.tasklist.error.exception.entity.EntityNotFoundException;
 import isthatkirill.tasklist.user.dto.UserDto;
 import isthatkirill.tasklist.user.service.UserService;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -48,18 +47,14 @@ class UserControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private UserDto userDto;
-    private final Long userId = 1L;
+    private final UserDto userDto = UserDto.builder()
+            .name("kirill")
+            .email("kirill@yandex.ru")
+            .username("isthatkirill")
+            .password("password")
+            .build();
 
-    @BeforeEach
-    void rebuildUser() {
-        userDto = UserDto.builder()
-                .name("kirill")
-                .email("kirill@yandex.ru")
-                .username("isthatkirill")
-                .password("password")
-                .build();
-    }
+    private final Long userId = 1L;
 
     @Test
     @SneakyThrows

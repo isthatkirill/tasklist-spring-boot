@@ -50,7 +50,14 @@ class TaskControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private TaskDtoRequest taskDtoRequest;
+    private final TaskDtoRequest taskDtoRequest = TaskDtoRequest.builder()
+            .title("title")
+            .description("description")
+            .priority("LOW")
+            .status("NEW")
+            .notify(true)
+            .expiresAt(formatDate(LocalDateTime.now().plusHours(3)))
+            .build();
 
     private final TaskDtoResponse taskDtoResponse = TaskDtoResponse.builder()
             .id(1L)
@@ -66,7 +73,6 @@ class TaskControllerTest {
     @Test
     @SneakyThrows
     void createTest() {
-        rebuildTask();
         Long userId = 1L;
 
         when(taskService.create(any(), anyLong())).thenReturn(taskDtoResponse);
@@ -93,7 +99,6 @@ class TaskControllerTest {
     @Test
     @SneakyThrows
     void createWithInvalidTitleTest() {
-        rebuildTask();
         taskDtoRequest.setTitle("t");
         Long userId = 1L;
 
@@ -113,7 +118,6 @@ class TaskControllerTest {
     @Test
     @SneakyThrows
     void createWithInvalidDescriptionTest() {
-        rebuildTask();
         taskDtoRequest.setDescription("bad");
         Long userId = 1L;
 
@@ -133,7 +137,6 @@ class TaskControllerTest {
     @Test
     @SneakyThrows
     void createWithInvalidPriorityTest() {
-        rebuildTask();
         taskDtoRequest.setPriority("MAXIMUM");
         Long userId = 1L;
 
@@ -153,7 +156,6 @@ class TaskControllerTest {
     @Test
     @SneakyThrows
     void createWithInvalidStatusTest() {
-        rebuildTask();
         taskDtoRequest.setStatus("NO_STATUS");
         Long userId = 1L;
 
@@ -173,7 +175,6 @@ class TaskControllerTest {
     @Test
     @SneakyThrows
     void createWithInvalidExpiresAtTest() {
-        rebuildTask();
         taskDtoRequest.setExpiresAt(LocalDateTime.now().minusHours(1));
         Long userId = 1L;
 
@@ -193,7 +194,6 @@ class TaskControllerTest {
     @Test
     @SneakyThrows
     void updateTest() {
-        rebuildTask();
         Long userId = 1L;
         Long taskId = 1L;
 
@@ -446,17 +446,6 @@ class TaskControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(taskService).delete(taskId);
-    }
-
-    private void rebuildTask() {
-        taskDtoRequest = TaskDtoRequest.builder()
-                .title("title")
-                .description("description")
-                .priority("LOW")
-                .status("NEW")
-                .notify(true)
-                .expiresAt(formatDate(LocalDateTime.now().plusHours(3)))
-                .build();
     }
 
     private LocalDateTime formatDate(LocalDateTime localDateTime) {

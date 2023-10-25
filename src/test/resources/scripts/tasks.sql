@@ -1,6 +1,6 @@
 insert into tasks (title, description, priority, status, created_at, expires_at, notify, user_id)
 values
-    ('Buy the car', 'Buy a mercedes-menz', 'HIGH', 'DONE', NOW() - interval '2' day, NOW() - interval '1' day, false, 1), -- id=1
+    ('Buy the car', 'Buy a mercedes-benz', 'HIGH', 'DONE', NOW() - interval '2' day, NOW() - interval '1' day, false, 1), -- id=1
     ('Do laboratory programming', 'Do laboratory tests on logical and functional programming', 'MEDIUM', 'IN_PROGRESS', NOW() - interval '2' DAY, NOW() - interval '1' DAY, true, 1), -- id=2
     ('Make a cake', 'Cake with cherry', 'LOW', 'DONE', NOW() + interval '1' DAY, NOW() + interval '2' DAY, true, 1), -- id=3
     ('Clean the room', 'Throw away old books', 'MEDIUM', 'NEW', NOW() + interval '1' DAY, NOW() + interval '2' DAY, false, 1),  -- id=4
