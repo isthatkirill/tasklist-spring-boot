@@ -194,7 +194,6 @@
                         <goals>
                             <goal>check</goal>
                         </goals>
-                        <phase>test</phase>
                         <configuration>
                             <rules>
                                 <rule>
