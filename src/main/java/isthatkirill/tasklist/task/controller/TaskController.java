@@ -2,10 +2,13 @@ package isthatkirill.tasklist.task.controller;
 
 import isthatkirill.tasklist.task.dto.TaskDtoRequest;
 import isthatkirill.tasklist.task.dto.TaskDtoResponse;
+import isthatkirill.tasklist.task.model.enums.Priority;
+import isthatkirill.tasklist.task.model.enums.Status;
 import isthatkirill.tasklist.task.service.TaskService;
 import isthatkirill.tasklist.util.Constants;
 import isthatkirill.tasklist.validation.OnCreate;
 import isthatkirill.tasklist.validation.OnUpdate;
+import isthatkirill.tasklist.validation.annotation.ValidEnum;
 import jakarta.validation.constraints.Future;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -55,8 +58,8 @@ public class TaskController {
     @PreAuthorize("@userSecurityExpression.isCorrectUserId(#userId)")
     public List<TaskDtoResponse> getAll(@PathVariable Long userId,
                                         @RequestParam(required = false) String keyword,
-                                        @RequestParam(required = false) String priority,
-                                        @RequestParam(required = false) String status,
+                                        @RequestParam(required = false) @ValidEnum(enumClass = Priority.class) String priority,
+                                        @RequestParam(required = false) @ValidEnum(enumClass = Status.class) String status,
                                         @RequestParam(required = false) @DateTimeFormat(pattern = Constants.DATE_PATTERN)
                                         @Future(message = "Task cannot expire in past") LocalDateTime expiresBefore,
                                         @RequestParam(required = false) Boolean notify,

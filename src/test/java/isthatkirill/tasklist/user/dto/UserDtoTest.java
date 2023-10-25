@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Kirill Emelyanov
@@ -42,13 +42,13 @@ class UserDtoTest {
     @SneakyThrows
     void userDtoDeserializeTest() {
         String content = """
-                    {
-                        "email": "email@email.ru",
-                        "name": "name",
-                        "username": "username",
-                        "password": "password"
-                    }
-                    """;
+                {
+                    "email": "email@email.ru",
+                    "name": "name",
+                    "username": "username",
+                    "password": "password"
+                }
+                """;
         UserDto deserialized = json.parse(content).getObject();
 
         assertThat(deserialized)

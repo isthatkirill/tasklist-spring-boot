@@ -41,7 +41,7 @@ class UserServiceImplTest {
     @MockBean
     private MailService mailService;
 
-    private UserDto userDto = UserDto.builder()
+    private final UserDto userDto = UserDto.builder()
             .email("email@email.ru")
             .name("name")
             .username("username")

@@ -49,7 +49,7 @@ class UserControllerTest {
     private MockMvc mvc;
 
     private UserDto userDto;
-    private Long userId = 1L;
+    private final Long userId = 1L;
 
     @BeforeEach
     void rebuildUser() {
