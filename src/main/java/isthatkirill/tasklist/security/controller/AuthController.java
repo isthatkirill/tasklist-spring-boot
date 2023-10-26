@@ -7,6 +7,8 @@ import isthatkirill.tasklist.user.dto.UserDto;
 import isthatkirill.tasklist.user.service.UserService;
 import isthatkirill.tasklist.validation.OnCreate;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,11 +37,10 @@ public class AuthController {
     @PostMapping("/register")
     public UserDto register(@Validated(OnCreate.class) @RequestBody UserDto userDto) {
         return userService.create(userDto);
-
     }
 
     @PostMapping("/refresh")
-    public JwtResponse refresh(@RequestBody String refreshToken) {
+    public JwtResponse refresh(@RequestBody @NotBlank String refreshToken) {
         return authService.refresh(refreshToken);
     }
 
