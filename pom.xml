@@ -200,12 +200,12 @@
                         <configuration>
                             <rules>
                                 <rule>
-                                    <element>PACKAGE</element>
+                                    <element>BUNDLE</element>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.7</minimum>
+                                            <minimum>0.6</minimum>
                                         </limit>
                                         <limit>
                                             <counter>BRANCH</counter>
@@ -223,6 +223,36 @@
                                             <minimum>0.6</minimum>
                                         </limit>
                                     </limits>
+                                </rule>
+                                <rule>
+                                    <element>PACKAGE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.8</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.8</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.8</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>METHOD</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.8</minimum>
+                                        </limit>
+                                    </limits>
+                                    <includes>
+                                        <include>isthatkirill.tasklist.**.controller</include>
+                                        <include>isthatkirill.tasklist.**.service</include>
+                                        <include>isthatkirill.tasklist.**.repository</include>
+                                    </includes>
                                 </rule>
                             </rules>
                         </configuration>

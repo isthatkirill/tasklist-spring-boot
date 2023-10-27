@@ -1,10 +1,7 @@
 package isthatkirill.tasklist.security.expression;
 
-import isthatkirill.tasklist.error.exception.entity.EntityNotFoundException;
-import isthatkirill.tasklist.group.model.Group;
 import isthatkirill.tasklist.group.repository.GroupRepository;
 import isthatkirill.tasklist.security.model.JwtUser;
-import isthatkirill.tasklist.task.model.Task;
 import isthatkirill.tasklist.task.repository.TaskRepository;
 import isthatkirill.tasklist.user.model.Role;
 import lombok.RequiredArgsConstructor;
