@@ -8,7 +8,6 @@ import isthatkirill.tasklist.user.service.UserService;
 import isthatkirill.tasklist.validation.OnCreate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -42,21 +42,11 @@ public class UserSecurityExpression {
     }
 
     public boolean isTaskOwner(Long taskId, Long userId) {
-        return isTaskExists(taskId) && isCorrectUserId(userId) && taskRepository.existsTaskByIdAndAndOwnerId(taskId, userId);
+        return isCorrectUserId(userId) && taskRepository.existsTaskByIdAndAndOwnerId(taskId, userId);
     }
 
     public boolean isGroupOwner(Long groupId, Long userId) {
-        return isGroupExists(groupId) && isCorrectUserId(userId) && groupRepository.existsGroupByIdAndOwnerId(groupId, userId);
-    }
-
-    private boolean isGroupExists(Long id) {
-        if (!groupRepository.existsById(id)) throw new EntityNotFoundException(Group.class, id);
-        return true;
-    }
-
-    private boolean isTaskExists(Long id) {
-        if (!taskRepository.existsById(id)) throw new EntityNotFoundException(Task.class, id);
-        return true;
+        return isCorrectUserId(userId) && groupRepository.existsGroupByIdAndOwnerId(groupId, userId);
     }
 
     private boolean isAdmin(Authentication authentication) {
