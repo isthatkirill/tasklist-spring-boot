@@ -2,6 +2,7 @@ package isthatkirill.tasklist.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import isthatkirill.tasklist.error.exception.entity.EntityNotFoundException;
+import isthatkirill.tasklist.security.filter.JwtTokenFilter;
 import isthatkirill.tasklist.user.dto.UserDto;
 import isthatkirill.tasklist.user.service.UserService;
 import lombok.SneakyThrows;
@@ -43,6 +44,9 @@ class UserControllerTest {
 
     @MockBean
     private AuthenticationEntryPoint authenticationEntryPoint;
+
+    @MockBean
+    private JwtTokenFilter jwtTokenFilter;
 
     @Autowired
     private MockMvc mvc;

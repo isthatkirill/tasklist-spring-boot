@@ -3,6 +3,7 @@ package isthatkirill.tasklist.security.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import isthatkirill.tasklist.security.dto.JwtRequest;
 import isthatkirill.tasklist.security.dto.JwtResponse;
+import isthatkirill.tasklist.security.filter.JwtTokenFilter;
 import isthatkirill.tasklist.security.service.AuthService;
 import isthatkirill.tasklist.user.dto.UserDto;
 import isthatkirill.tasklist.user.service.UserService;
@@ -50,6 +51,9 @@ class AuthControllerTest {
 
     @MockBean
     private AuthenticationEntryPoint authenticationEntryPoint;
+
+    @MockBean
+    private JwtTokenFilter jwtTokenFilter;
 
     @Test
     @SneakyThrows
