@@ -111,7 +111,7 @@ public class JwtTokenProvider {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
-        return Long.parseLong(claims.getBody().getId());
+        return claims.getBody().get("id", Long.class);
     }
 
     private List<String> buildStringList(Set<Role> roles) {
