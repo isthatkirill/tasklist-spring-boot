@@ -33,7 +33,7 @@ class ReminderImplTest {
     @MockBean
     private MailService mailService;
 
-    private Task task = Task.builder()
+    private final Task task = Task.builder()
             .title("title")
             .description("description")
             .status("DONE")
