@@ -31,8 +31,6 @@ public class MailServiceImpl implements MailService {
         switch (type) {
             case REGISTRATION -> sendRegistrationEmail(user);
             case REMINDER -> sendReminderEmail(user, params);
-            default -> {
-            }
         }
     }
 
