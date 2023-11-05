@@ -16,8 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Properties;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Kirill Emelyanov
@@ -67,5 +66,12 @@ class MailServiceImplTest {
         mailService.sendEmail(user, MailType.REMINDER, properties);
 
         verify(javaMailSender).send((MimeMessage) any());
+    }
+
+    @Test
+    void sendUnknownEmailTest() {
+        mailService.sendEmail(user, null, null);
+
+        verifyNoInteractions(javaMailSender);
     }
 }

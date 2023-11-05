@@ -42,14 +42,14 @@ class GroupDtoResponseTest {
     @Test
     @SneakyThrows
     void groupDtoResponseSerializeTest() {
-       JsonContent<GroupDtoResponse> result = json.write(groupDtoResponse);
+        JsonContent<GroupDtoResponse> result = json.write(groupDtoResponse);
 
-       assertThat(result)
-               .hasJsonPathNumberValue("id", groupDtoResponse.getId())
-               .hasJsonPathStringValue("title", groupDtoResponse.getTitle())
-               .hasJsonPathStringValue("description", groupDtoResponse.getDescription())
-               .hasJsonPathStringValue("progress", groupDtoResponse.getProgress())
-               .hasJsonPathArrayValue("tasks", groupDtoResponse.getTasks());
+        assertThat(result)
+                .hasJsonPathNumberValue("id", groupDtoResponse.getId())
+                .hasJsonPathStringValue("title", groupDtoResponse.getTitle())
+                .hasJsonPathStringValue("description", groupDtoResponse.getDescription())
+                .hasJsonPathStringValue("progress", groupDtoResponse.getProgress())
+                .hasJsonPathArrayValue("tasks", groupDtoResponse.getTasks());
     }
 
     @Test
@@ -67,7 +67,6 @@ class GroupDtoResponseTest {
                             "title": "task_title",
                             "description": "task_description",
                             "createdAt": "2023-02-15 13:12:11"
-                        
                         }
                     ]
                 }
