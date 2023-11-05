@@ -79,6 +79,22 @@ class TaskRepositoryTest {
     }
 
     @Test
+    void getAllTasksWithBlankStatusAndBlankPriorityAndBlankKeywordTest() {
+        Long userId = 1L;
+        Integer defaultFrom = 0;
+        Integer defaultSize = 10;
+        String status = "  ";
+        String priority = "  ";
+        String keyword = " ";
+
+        List<Task> tasks = taskRepository.getAllTasks(userId, keyword, priority, status, null, null, defaultFrom, defaultSize);
+
+        assertThat(tasks).hasSize(7)
+                .extracting(Task::getId)
+                .containsExactly(1L, 2L, 3L, 4L, 5L, 6L, 7L);
+    }
+
+    @Test
     void getAllTasksWithKeywordTest() {
         Long userId = 1L;
         Integer defaultFrom = 0;
@@ -118,6 +134,22 @@ class TaskRepositoryTest {
         assertThat(tasks).hasSize(3)
                 .extracting(Task::getId)
                 .containsExactly(3L, 4L, 5L);
+    }
+
+    @Test
+    void getAllTasksWithExpiresBeforeAndStatusAndPriorityTest() {
+        Long userId = 1L;
+        Integer defaultFrom = 0;
+        Integer defaultSize = 10;
+        String priority = "HIGH";
+        String status = "DONE";
+        LocalDateTime expiresBefore = LocalDateTime.now();
+
+        List<Task> tasks = taskRepository.getAllTasks(userId, null, priority, status, expiresBefore, null, defaultFrom, defaultSize);
+
+        assertThat(tasks).hasSize(1)
+                .extracting(Task::getId)
+                .containsExactly(1L);
     }
 
     @Test
