@@ -41,17 +41,17 @@ class UserServiceImplTest {
     @MockBean
     private MailService mailService;
 
-    private final UserDto userDto = UserDto.builder()
-            .email("email@email.ru")
-            .name("name")
-            .username("username")
-            .password("password")
-            .build();
-
     @Test
     @Order(1)
     @Sql(value = {"/scripts/drop.sql", "/scripts/init.sql", "/scripts/users.sql"})
     void createTest() {
+        UserDto userDto = UserDto.builder()
+                .email("email@email.ru")
+                .name("name")
+                .username("username")
+                .password("password")
+                .build();
+
         String encodedPassword = userDto.getPassword() + "encoded";
 
         when(passwordEncoder.encode(userDto.getPassword())).thenReturn(encodedPassword);
@@ -71,6 +71,13 @@ class UserServiceImplTest {
     @Test
     @Order(2)
     void createWithSameEmailAndUsernameTest() {
+        UserDto userDto = UserDto.builder()
+                .email("email@email.ru")
+                .name("name")
+                .username("username")
+                .password("password")
+                .build();
+
         assertThrows(NotUniqueException.class, () -> userService.create(userDto));
 
         verifyNoInteractions(passwordEncoder, mailService);
@@ -78,13 +85,15 @@ class UserServiceImplTest {
 
     @Test
     @Order(3)
-    void updateTest() {
+    void updateWithAllFieldsTest() {
         Long id = 4L;
+        UserDto userDto = UserDto.builder()
+                .email("new@email.ru")
+                .name("new name")
+                .username("new username")
+                .password("new password")
+                .build();
         String encodedPassword = userDto.getPassword() + "encoded";
-
-        userDto.setUsername("new username");
-        userDto.setName("new name");
-        userDto.setEmail("new@email.ru");
 
         when(passwordEncoder.encode(userDto.getPassword())).thenReturn(encodedPassword);
 
@@ -97,14 +106,70 @@ class UserServiceImplTest {
                 .hasFieldOrPropertyWithValue("password", encodedPassword);
 
         verify(passwordEncoder).encode(userDto.getPassword());
+        verifyNoInteractions(mailService);
     }
 
     @Test
     @Order(4)
+    void updateOnlyNameTest() {
+        Long id = 4L;
+        UserDto userDto = UserDto.builder()
+                .name("new name updated")
+                .build();
+
+        UserDto result = userService.update(userDto, id);
+
+        assertThat(result).isNotNull()
+                .hasFieldOrPropertyWithValue("name", userDto.getName());
+
+        verifyNoInteractions(passwordEncoder, mailService);
+    }
+
+    @Test
+    @Order(5)
+    void updateOnlyUsernameTest() {
+        Long id = 4L;
+        UserDto userDto = UserDto.builder()
+                .username("new username updated")
+                .build();
+
+        UserDto result = userService.update(userDto, id);
+
+        assertThat(result).isNotNull()
+                .hasFieldOrPropertyWithValue("username", userDto.getUsername());
+
+        verifyNoInteractions(passwordEncoder, mailService);
+    }
+
+    @Test
+    @Order(5)
+    void updateEmailAndPasswordTest() {
+        Long id = 4L;
+        UserDto userDto = UserDto.builder()
+                .email("newupdated@email.ru")
+                .password("new password updated")
+                .build();
+        String encodedPassword = userDto.getPassword() + "encoded";
+
+        when(passwordEncoder.encode(userDto.getPassword())).thenReturn(encodedPassword);
+
+        UserDto result = userService.update(userDto, id);
+
+        assertThat(result).isNotNull()
+                .hasFieldOrPropertyWithValue("email", userDto.getEmail())
+                .hasFieldOrPropertyWithValue("password", encodedPassword);
+
+        verify(passwordEncoder).encode(userDto.getPassword());
+        verifyNoInteractions(mailService);
+    }
+
+    @Test
+    @Order(6)
     void updateWithAlreadyExistentUsernameTest() {
         Long id = 4L;
-
-        userDto.setUsername("isthatkirill");
+        UserDto userDto = UserDto.builder()
+                .username("isthatkirill")
+                .build();
 
         assertThrows(NotUniqueException.class, () -> userService.update(userDto, id));
 
@@ -112,9 +177,12 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Order(5)
+    @Order(7)
     void updateNonExistentUserTest() {
         Long id = Long.MAX_VALUE;
+        UserDto userDto = UserDto.builder()
+                .username("isthatkirill")
+                .build();
 
         userDto.setUsername("isthatkirill");
 
@@ -124,7 +192,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Order(6)
+    @Order(8)
     void getByIdTest() {
         Long id = 1L;
 
@@ -136,7 +204,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Order(7)
+    @Order(9)
     void getByIdNonExistentTest() {
         Long id = Long.MAX_VALUE;
 
@@ -144,13 +212,13 @@ class UserServiceImplTest {
     }
 
     @Test
-    @Order(8)
+    @Order(10)
     void getAllTest() {
         List<UserDto> users = userService.getAll();
 
         assertThat(users).hasSize(4)
                 .extracting(UserDto::getUsername)
-                .containsExactlyInAnyOrder("isthatkirill", "offi_anya", "stassy", "new username");
+                .containsExactlyInAnyOrder("isthatkirill", "offi_anya", "stassy", "new username updated");
     }
 
 
