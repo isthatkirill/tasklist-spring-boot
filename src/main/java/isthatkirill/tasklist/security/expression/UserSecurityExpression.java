@@ -1,7 +1,10 @@
 package isthatkirill.tasklist.security.expression;
 
+import isthatkirill.tasklist.error.exception.entity.EntityNotFoundException;
+import isthatkirill.tasklist.group.model.Group;
 import isthatkirill.tasklist.group.repository.GroupRepository;
 import isthatkirill.tasklist.security.model.JwtUser;
+import isthatkirill.tasklist.task.model.Task;
 import isthatkirill.tasklist.task.repository.TaskRepository;
 import isthatkirill.tasklist.user.model.Role;
 import lombok.RequiredArgsConstructor;
@@ -39,11 +42,21 @@ public class UserSecurityExpression {
     }
 
     public boolean isTaskOwner(Long taskId, Long userId) {
-        return isCorrectUserId(userId) && taskRepository.existsTaskByIdAndAndOwnerId(taskId, userId);
+        return isTaskExists(taskId) && isCorrectUserId(userId) && taskRepository.existsTaskByIdAndAndOwnerId(taskId, userId);
     }
 
     public boolean isGroupOwner(Long groupId, Long userId) {
-        return isCorrectUserId(userId) && groupRepository.existsGroupByIdAndOwnerId(groupId, userId);
+        return isGroupExists(groupId) && isCorrectUserId(userId) && groupRepository.existsGroupByIdAndOwnerId(groupId, userId);
+    }
+
+    private boolean isGroupExists(Long id) {
+        if (groupRepository.existsById(id)) return true;
+        throw new EntityNotFoundException(Group.class, id);
+    }
+
+    private boolean isTaskExists(Long id) {
+        if (taskRepository.existsById(id)) return true;
+        throw new EntityNotFoundException(Task.class, id);
     }
 
     private boolean isAdmin(Authentication authentication) {

@@ -91,6 +91,7 @@ class UserSecurityExpressionTest {
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getPrincipal()).thenReturn(user);
+        when(taskRepository.existsById(any())).thenReturn(true);
         when(taskRepository.existsTaskByIdAndAndOwnerId(any(), any())).thenReturn(true);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -99,6 +100,7 @@ class UserSecurityExpressionTest {
         assertThat(result).isTrue();
         verify(authentication).getPrincipal();
         verify(taskRepository).existsTaskByIdAndAndOwnerId(taskId, userId);
+        verify(taskRepository).existsById(taskId);
     }
 
     @Test
@@ -109,6 +111,7 @@ class UserSecurityExpressionTest {
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getPrincipal()).thenReturn(user);
+        when(taskRepository.existsById(any())).thenReturn(true);
         when(taskRepository.existsTaskByIdAndAndOwnerId(any(), any())).thenReturn(false);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -117,6 +120,7 @@ class UserSecurityExpressionTest {
         assertThat(result).isFalse();
         verify(authentication).getPrincipal();
         verify(taskRepository).existsTaskByIdAndAndOwnerId(taskId, userId);
+        verify(taskRepository).existsById(taskId);
     }
 
     @Test
@@ -127,6 +131,7 @@ class UserSecurityExpressionTest {
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getPrincipal()).thenReturn(user);
+        when(groupRepository.existsById(any())).thenReturn(true);
         when(groupRepository.existsGroupByIdAndOwnerId(any(), any())).thenReturn(true);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -135,6 +140,7 @@ class UserSecurityExpressionTest {
         assertThat(result).isTrue();
         verify(authentication).getPrincipal();
         verify(groupRepository).existsGroupByIdAndOwnerId(groupId, userId);
+        verify(groupRepository).existsById(groupId);
     }
 
     @Test
@@ -146,6 +152,7 @@ class UserSecurityExpressionTest {
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getPrincipal()).thenReturn(user);
+        when(groupRepository.existsById(any())).thenReturn(true);
         when(groupRepository.existsGroupByIdAndOwnerId(any(), any())).thenReturn(true);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -153,7 +160,8 @@ class UserSecurityExpressionTest {
 
         assertThat(result).isFalse();
         verify(authentication).getPrincipal();
-        verifyNoInteractions(groupRepository);
+        verify(groupRepository).existsById(groupId);
+        verifyNoMoreInteractions(groupRepository);
     }
 
     @Test
@@ -164,6 +172,7 @@ class UserSecurityExpressionTest {
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getPrincipal()).thenReturn(user);
+        when(groupRepository.existsById(any())).thenReturn(true);
         when(groupRepository.existsGroupByIdAndOwnerId(any(), any())).thenReturn(false);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -171,6 +180,7 @@ class UserSecurityExpressionTest {
 
         assertThat(result).isFalse();
         verify(authentication).getPrincipal();
+        verify(groupRepository).existsById(groupId);
         verify(groupRepository).existsGroupByIdAndOwnerId(groupId, userId);
     }
 }
