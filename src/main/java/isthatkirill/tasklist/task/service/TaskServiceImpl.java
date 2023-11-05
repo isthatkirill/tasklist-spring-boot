@@ -47,8 +47,9 @@ public class TaskServiceImpl implements TaskService {
         if (taskDto.getNotify() != null) task.setNotify(taskDto.getNotify());
         if (taskDto.getTitle() != null) task.setTitle(taskDto.getTitle());
         if (taskDto.getDescription() != null) task.setDescription(taskDto.getDescription());
-        if (taskDto.getPriority() != null) task.setPriority(taskDto.getPriority());
-        if (taskDto.getStatus() != null) task.setStatus(taskDto.getStatus());
+        if (taskDto.getPriority() != null && !taskDto.getPriority().equals("DEFAULT"))
+            task.setPriority(taskDto.getPriority());
+        if (taskDto.getStatus() != null && !taskDto.getStatus().equals("NEW")) task.setStatus(taskDto.getStatus());
         if (taskDto.getExpiresAt() != null) task.setExpiresAt(taskDto.getExpiresAt());
         task.setLastModifiedAt(LocalDateTime.now());
         return taskMapper.toTaskDtoResponse(taskRepository.save(task));

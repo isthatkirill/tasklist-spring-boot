@@ -50,13 +50,13 @@ public class UserSecurityExpression {
     }
 
     private boolean isGroupExists(Long id) {
-        if (!groupRepository.existsById(id)) throw new EntityNotFoundException(Group.class, id);
-        return true;
+        if (groupRepository.existsById(id)) return true;
+        throw new EntityNotFoundException(Group.class, id);
     }
 
     private boolean isTaskExists(Long id) {
-        if (!taskRepository.existsById(id)) throw new EntityNotFoundException(Task.class, id);
-        return true;
+        if (taskRepository.existsById(id)) return true;
+        throw new EntityNotFoundException(Task.class, id);
     }
 
     private boolean isAdmin(Authentication authentication) {

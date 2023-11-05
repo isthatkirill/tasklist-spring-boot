@@ -81,7 +81,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private void checkForUnique(UserDto userDto) {
-        if (userRepository.findByEmailOrUsername(userDto.getEmail(), userDto.getUsername()).isPresent()) {
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent() ||
+                userRepository.findByUsername(userDto.getUsername()).isPresent()) {
             throw new NotUniqueException("Users with the same name or email already exist.");
         }
     }

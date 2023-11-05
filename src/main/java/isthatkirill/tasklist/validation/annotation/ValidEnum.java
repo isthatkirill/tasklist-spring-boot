@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  */
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Constraint(validatedBy = EnumValidator.class)
 public @interface ValidEnum {
     Class<? extends Enum<?>> enumClass();

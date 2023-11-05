@@ -26,14 +26,12 @@ public class MailServiceImpl implements MailService {
     private final Configuration configuration;
     private final JavaMailSender mailSender;
 
-
     @Override
     public void sendEmail(User user, MailType type, Properties params) {
+        if (type == null) return;
         switch (type) {
             case REGISTRATION -> sendRegistrationEmail(user);
             case REMINDER -> sendReminderEmail(user, params);
-            default -> {
-            }
         }
     }
 
