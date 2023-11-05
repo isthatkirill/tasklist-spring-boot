@@ -1,5 +1,6 @@
 package isthatkirill.tasklist.group.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import isthatkirill.tasklist.group.dto.GroupDtoRequest;
 import isthatkirill.tasklist.group.dto.GroupDtoResponse;
@@ -28,6 +29,7 @@ public class GroupController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("@userSecurityExpression.isCorrectUserId(#userId)")
+    @Operation(summary = "Create group")
     public GroupDtoResponse create(@Validated(OnCreate.class) @RequestBody GroupDtoRequest groupDtoRequest,
                                    @PathVariable Long userId) {
         return groupService.create(groupDtoRequest, userId);
@@ -35,6 +37,7 @@ public class GroupController {
 
     @PatchMapping("/{groupId}")
     @PreAuthorize("@userSecurityExpression.isGroupOwner(#groupId, #userId)")
+    @Operation(summary = "Update group")
     public GroupDtoResponse update(@Validated(OnUpdate.class) @RequestBody GroupDtoRequest groupDtoRequest,
                                    @PathVariable Long userId,
                                    @PathVariable Long groupId) {
@@ -44,12 +47,14 @@ public class GroupController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{groupId}")
     @PreAuthorize("@userSecurityExpression.isGroupOwner(#groupId, #userId)")
+    @Operation(summary = "Delete group")
     public void delete(@PathVariable Long userId, @PathVariable Long groupId) {
         groupService.delete(groupId);
     }
 
     @PatchMapping("/{groupId}/join/{taskId}")
     @PreAuthorize("@userSecurityExpression.isGroupOwner(#groupId, #userId) && @userSecurityExpression.isTaskOwner(#taskId, #userId)")
+    @Operation(summary = "Add task in group")
     public GroupDtoResponse addTaskInGroup(@PathVariable Long userId,
                                            @PathVariable Long groupId,
                                            @PathVariable Long taskId) {
@@ -58,6 +63,7 @@ public class GroupController {
 
     @DeleteMapping("/{groupId}/delete/{taskId}")
     @PreAuthorize("@userSecurityExpression.isGroupOwner(#groupId, #userId) && @userSecurityExpression.isTaskOwner(#taskId, #userId)")
+    @Operation(summary = "Delete task from group")
     public GroupDtoResponse deleteTaskFromGroup(@PathVariable Long userId,
                                                 @PathVariable Long groupId,
                                                 @PathVariable Long taskId) {
@@ -66,6 +72,7 @@ public class GroupController {
 
     @GetMapping("/{groupId}")
     @PreAuthorize("@userSecurityExpression.isGroupOwner(#groupId, #userId)")
+    @Operation(summary = "Get group by id")
     public GroupDtoResponse getById(@PathVariable Long userId, @PathVariable Long groupId) {
         return groupService.getById(groupId);
     }

@@ -34,15 +34,15 @@ public class TaskDtoResponse {
     @Schema(description = "Task status", example = "DONE")
     String status;
 
-    @Schema(description = "Creation date", example = "2023-11-12 10:15:30", pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "Creation date", example = "2023-11-12 10:15:30", format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = Constants.DATE_PATTERN)
     LocalDateTime createdAt;
 
-    @Schema(description = "Last modified date", example = "2023-11-12 16:45:45", pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "Last modified date", example = "2023-11-12 16:45:45", format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = Constants.DATE_PATTERN)
     LocalDateTime lastModifiedAt;
 
-    @Schema(description = "Expiration date", example = "2025-02-15 13:12:45", pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "Expiration date", example = "2025-02-15 13:12:45", format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = Constants.DATE_PATTERN)
     LocalDateTime expiresAt;
 

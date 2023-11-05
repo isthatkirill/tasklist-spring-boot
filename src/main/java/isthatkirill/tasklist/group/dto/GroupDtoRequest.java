@@ -1,5 +1,7 @@
 package isthatkirill.tasklist.group.dto;
 
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import isthatkirill.tasklist.validation.OnCreate;
 import isthatkirill.tasklist.validation.OnUpdate;
 import jakarta.validation.constraints.NotBlank;
@@ -21,6 +23,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GroupDtoRequest {
 
+    @Schema(description = "Title of the group", example = "Preparing for a birthday", minLength = 2, maxLength = 128)
     @NotBlank(message = "Title cannot be blank", groups = OnCreate.class)
     @Size(
             min = 2,
@@ -30,6 +33,7 @@ public class GroupDtoRequest {
     )
     String title;
 
+    @Schema(description = "Description of the group", example = "Prepare for mother's birthday", minLength = 8, maxLength = 512)
     @NotBlank(message = "Description cannot be blank", groups = OnCreate.class)
     @Size(
             min = 8,
@@ -39,6 +43,7 @@ public class GroupDtoRequest {
     )
     String description;
 
+    @ArraySchema(arraySchema = @Schema(description = "Ids of tasks, which will be added in the group", example = "[1, 2]"))
     List<Long> taskIds = new ArrayList<>();
 
 }
