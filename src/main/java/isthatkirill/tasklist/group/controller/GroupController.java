@@ -1,5 +1,6 @@
 package isthatkirill.tasklist.group.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import isthatkirill.tasklist.group.dto.GroupDtoRequest;
 import isthatkirill.tasklist.group.dto.GroupDtoResponse;
 import isthatkirill.tasklist.group.service.GroupService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users/{userId}/groups")
+@Tag(name = "GroupController", description = "Endpoints for managing groups")
 public class GroupController {
 
     private final GroupService groupService;

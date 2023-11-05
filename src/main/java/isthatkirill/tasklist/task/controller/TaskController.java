@@ -1,5 +1,7 @@
 package isthatkirill.tasklist.task.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import isthatkirill.tasklist.task.dto.TaskDtoRequest;
 import isthatkirill.tasklist.task.dto.TaskDtoResponse;
 import isthatkirill.tasklist.task.model.enums.Priority;
@@ -28,6 +30,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users/{userId}/tasks")
+@Tag(name = "TaskController", description = "Endpoints for managing tasks")
 public class TaskController {
 
     private final TaskService taskService;
@@ -35,6 +38,7 @@ public class TaskController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("@userSecurityExpression.isCorrectUserId(#userId)")
+    @Operation(summary = "Create task")
     public TaskDtoResponse create(@Validated(OnCreate.class) @RequestBody TaskDtoRequest taskDto,
                                   @PathVariable Long userId) {
         return taskService.create(taskDto, userId);
@@ -42,6 +46,7 @@ public class TaskController {
 
     @PatchMapping("/{taskId}")
     @PreAuthorize("@userSecurityExpression.isTaskOwner(#taskId, #userId)")
+    @Operation(summary = "Update task")
     public TaskDtoResponse update(@Validated(OnUpdate.class) @RequestBody TaskDtoRequest taskDto,
                                   @PathVariable Long userId,
                                   @PathVariable Long taskId) {
@@ -50,12 +55,15 @@ public class TaskController {
 
     @GetMapping("/{taskId}")
     @PreAuthorize("@userSecurityExpression.isTaskOwner(#taskId, #userId)")
+    @Operation(summary = "Get task by id")
     public TaskDtoResponse getById(@PathVariable Long userId, @PathVariable Long taskId) {
         return taskService.getById(taskId);
     }
 
     @GetMapping
     @PreAuthorize("@userSecurityExpression.isCorrectUserId(#userId)")
+    @Operation(summary = "Get all users tasks with filters",
+            description = "You can filter by the following parameters: keyword, priority, status, expiration date, notify. Pagination is also supported.")
     public List<TaskDtoResponse> getAll(@PathVariable Long userId,
                                         @RequestParam(required = false) String keyword,
                                         @RequestParam(required = false) @ValidEnum(enumClass = Priority.class) String priority,
@@ -71,6 +79,7 @@ public class TaskController {
     @DeleteMapping("/{taskId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("@userSecurityExpression.isTaskOwner(#taskId, #userId)")
+    @Operation(summary = "Delete task by id")
     public void delete(@PathVariable Long userId, @PathVariable Long taskId) {
         taskService.delete(taskId);
     }

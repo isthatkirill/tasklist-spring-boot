@@ -1,5 +1,6 @@
 package isthatkirill.tasklist.security.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import isthatkirill.tasklist.security.dto.JwtRequest;
 import isthatkirill.tasklist.security.dto.JwtResponse;
 import isthatkirill.tasklist.security.service.AuthService;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
+@Tag(name = "AuthController", description = "Endpoints for login and registration")
 public class AuthController {
 
     private final AuthService authService;
