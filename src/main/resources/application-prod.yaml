@@ -31,3 +31,6 @@ security:
     secret: ${SECRET}
     access: ${ACCESS}
     refresh: ${REFRESH}
+
+springdoc:
+  override-with-generic-response: false
